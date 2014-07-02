@@ -66,20 +66,19 @@ class Plugin extends PluginBase
 				$classObj = $class::instance();
 				$classObj->extendSettingsForm($form);
 			}
-        });
+		});
 
-		// Event::listen('backend.list.extendColumns', function($widget) {
-		// 	if (!$widget->getController() instanceof \RainLab\User\Controllers\Users) return;
+		Event::listen('backend.form.extendFields', function($widget) {
+			if (!$widget->getController() instanceof \RainLab\User\Controllers\Users) return;
+			if ($widget->getContext() != 'update') return;
 
-		// 	$widget->addColumns([
-		// 		'forum_member_username' => [
-		// 			'label'      => 'Forum Username',
-		// 			'relation'   => 'forum_member',
-		// 			'select'     => '@username',
-		// 			'searchable' => true,
-		// 		]
-		// 	]);
-		// });
+			$widget->addFields([
+				'flynsarmy_sociallogin[providers]' => [
+					'label'   => 'Social Providers',
+					'type'    => 'Flynsarmy\SocialLogin\FormWidgets\LoginProviders',
+				],
+			], 'secondary');
+		});
 	}
 
 	function register_flynsarmy_sociallogin_providers()
