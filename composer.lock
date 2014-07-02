@@ -1,0 +1,120 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
+    ],
+    "hash": "a5a7753003adaa4b794fb28ceef19de4",
+    "packages": [
+        {
+            "name": "google/apiclient",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/google/google-api-php-client.git",
+                "reference": "816d07d18f38a6af8e087280608ee2c171ded9c2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/google/google-api-php-client/zipball/816d07d18f38a6af8e087280608ee2c171ded9c2",
+                "reference": "816d07d18f38a6af8e087280608ee2c171ded9c2",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.2.1"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "3.7.*"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "classmap": [
+                    "src/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "include-path": [
+                "src/"
+            ],
+            "license": [
+                "Apache-2.0"
+            ],
+            "description": "Client library for Google APIs",
+            "homepage": "http://developers.google.com/api-client-library/php",
+            "keywords": [
+                "google"
+            ],
+            "time": "2014-07-01 17:14:54"
+        },
+        {
+            "name": "hybridauth/hybridauth",
+            "version": "v2.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/hybridauth/hybridauth.git",
+                "reference": "a38f981ad45fafc23eed347b45e6e1a1508c99da"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/hybridauth/hybridauth/zipball/a38f981ad45fafc23eed347b45e6e1a1508c99da",
+                "reference": "a38f981ad45fafc23eed347b45e6e1a1508c99da",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "php": ">=5.2.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Hybrid": "hybridauth/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "(MIT or GPL-3.0+)"
+            ],
+            "authors": [
+                {
+                    "name": "Miled",
+                    "email": "hybridauth@gmail.com"
+                }
+            ],
+            "description": "Open source social sign on PHP library.",
+            "homepage": "http://hybridauth.sourceforge.net",
+            "keywords": [
+                "OpenId",
+                "facebook",
+                "google",
+                "hybridauth",
+                "login",
+                "oauth",
+                "social",
+                "twitter",
+                "yahoo"
+            ],
+            "time": "2014-05-26 16:29:53"
+        }
+    ],
+    "packages-dev": [
+
+    ],
+    "aliases": [
+
+    ],
+    "minimum-stability": "stable",
+    "stability-flags": {
+        "google/apiclient": 20
+    },
+    "platform": [
+
+    ],
+    "platform-dev": [
+
+    ]
+}

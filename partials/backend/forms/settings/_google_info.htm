@@ -1,0 +1,15 @@
+<div class="callout callout-info">
+	<div class="header">
+		<i class="icon-info"></i>
+		<h3>How to retrieve your credentials</h3>
+	</div>
+	<div class="content">
+		<ol>
+			<li>Go to <a target="_blanck" href="https://console.developers.google.com/project">https://console.developers.google.com/project</a> and create a new project.</li>
+			<li>Go to <b>APIs &amp; Auth - APIs</b> and enable <b>Google+ API</b> and <b>Google+ Domains API</b></li>
+			<li>Go to <b>APIs &amp; Auth - Credentials</b> and click on <b>Create new client ID</b>. A pop-up named <b>"Create Client ID"</b> will appear.</li>
+			<li>Select <b>Web Application</b>. Set <b>Authorized JavaScript Origins</b> to <span style="color:green"><?= URL::to('') ?></span> and <b>Authorized Redirect URI</b> to <span style="color:green"><?= URL::route('flynsarmy_sociallogin_provider', ['Google']) ?></span></li>
+			<li>Click <b>Create Client ID</b>.</li>
+		</ol>
+	</div>
+</div>
