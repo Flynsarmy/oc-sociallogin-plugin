@@ -17,6 +17,9 @@ Route::get('flynsarmy/sociallogin/{provider}/{action?}', array("as" => "flynsarm
 	try {
 		// This will contain [token => ..., email => ..., ...]
 		$provider_response = $provider->login($provider_name, $action);
+
+		if ( !is_array($provider_response) )
+			return Redirect::to($error_redirect);
 	} catch (Exception $e) {
 		// Log the error
 		Log::error($e->getMessage() . ' in ' . $e->getFile() . ' on line ' . $e->getLine());

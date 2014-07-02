@@ -11,6 +11,8 @@ use October\Rain\Support\Markdown;
  */
 class Provider extends Model
 {
+    public $timestamps = false;
+
 	/**
      * @var string The database table used by the model.
      */

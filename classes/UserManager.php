@@ -81,7 +81,7 @@ class UserManager
 	 */
 	public function attachProvider(User $user, array $provider_details)
 	{
-		$user->flynsarmy_sociallogin_providers[] = new Provider($provider_details);
+		$user->flynsarmy_sociallogin_providers()->add(new Provider($provider_details));
 		$user->save();
 
 		return $user;

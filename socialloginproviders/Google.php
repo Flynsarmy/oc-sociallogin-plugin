@@ -123,11 +123,13 @@ class Google extends SocialLoginProviderBase
 		if ( $client->isAccessTokenExpired() )
 		{
 			$decoded_token = json_decode($client->getAccessToken());
-			$refresh_token = $decodedToken->refresh_token;
+			$refresh_token = $decoded_token->refresh_token;
 			$client->refreshToken($refresh_token);
 		}
 
 		$data = $client->verifyIdToken()->getAttributes();
+
+		Session::forget('access_token');
 
 		return [
 			'token' => $data['payload']['id'],
