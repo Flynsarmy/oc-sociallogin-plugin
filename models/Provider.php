@@ -11,22 +11,22 @@ use October\Rain\Support\Markdown;
  */
 class Provider extends Model
 {
-    public $timestamps = false;
+	public $timestamps = false;
 
 	/**
-     * @var string The database table used by the model.
-     */
-    public $table = 'flynsarmy_sociallogin_user_providers';
-
-    /**
-     * @var array The attributes that are mass assignable.
-     */
-    protected $fillable = ['user_id', 'provider_id', 'provider_token'];
+	 * @var string The database table used by the model.
+	 */
+	public $table = 'flynsarmy_sociallogin_user_providers';
 
 	/**
-     * @var array Relations
-     */
-    public $belongsTo = [
-        'user' => ['RainLab\User\Models\User']
-    ];
+	 * @var array The attributes that are mass assignable.
+	 */
+	protected $fillable = ['user_id', 'provider_id', 'provider_token'];
+
+	/**
+	 * @var array Relations
+	 */
+	public $belongsTo = [
+		'user' => ['RainLab\User\Models\User']
+	];
 }

@@ -24,10 +24,10 @@ class Plugin extends PluginBase
 	public function pluginDetails()
 	{
 		return [
-			'name'        => 'SocialLogin',
-			'description' => 'No description provided yet...',
+			'name'        => 'Social Login',
+			'description' => 'Allows visitors to register/sign in with their social media accounts',
 			'author'      => 'Flynsarmy',
-			'icon'        => 'icon-leaf'
+			'icon'        => 'icon-users'
 		];
 	}
 
