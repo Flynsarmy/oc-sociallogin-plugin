@@ -1,3 +1,5 @@
 1.0.1:
     - First version of SocialLogin
     - create_flynsarmy_sociallogin_user_providers.php
+1.0.2:
+    - Require RainLab.User
