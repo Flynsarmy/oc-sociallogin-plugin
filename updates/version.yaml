@@ -3,3 +3,5 @@
     - create_flynsarmy_sociallogin_user_providers.php
 1.0.2:
     - Require RainLab.User
+1.0.3:
+    - Fixed RainLab.User integration

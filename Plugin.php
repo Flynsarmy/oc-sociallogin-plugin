@@ -74,7 +74,7 @@ class Plugin extends PluginBase
 			if ($widget->getContext() != 'update') return;
 
 			$widget->addFields([
-				'flynsarmy_sociallogin[providers]' => [
+				'flynsarmy_sociallogin_providers' => [
 					'label'   => 'Social Providers',
 					'type'    => 'Flynsarmy\SocialLogin\FormWidgets\LoginProviders',
 				],
