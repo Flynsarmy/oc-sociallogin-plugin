@@ -28,14 +28,28 @@ class UserManager
 			$user = Auth::findUserByLogin( $user_details['email'] );
 			// No user with this email exists - create one
 			if ( !$user )
+			{
+				// Assign a random password
+				$user_details['password'] = $user_details['password_confirmation'] = str_random(30);
+				// Register the user
 				$user = $this->registerUser($provider_details, $user_details);
+			}
 			// User was found - attach provider
 			else
 				$user = $this->attachProvider($user, $provider_details);
 		}
 		// Provider was found, return the attached user
 		else
+		{
 			$user = $provider->user;
+
+			// The user may have been deleted. Make sure this isn't the case
+			if ( !$user )
+			{
+				$provider->delete();
+				return $this->find($provider_details, $user_details);
+			}
+		}
 
 		return $user;
 	}
