@@ -29,8 +29,6 @@ class UserManager
 			// No user with this email exists - create one
 			if ( !$user )
 			{
-				// Assign a random password
-				$user_details['password'] = $user_details['password_confirmation'] = str_random(30);
 				// Register the user
 				$user = $this->registerUser($provider_details, $user_details);
 			}
@@ -95,8 +93,9 @@ class UserManager
 	 */
 	public function attachProvider(User $user, array $provider_details)
 	{
-		$user->flynsarmy_sociallogin_providers()->add(new Provider($provider_details));
-		$user->save();
+		$provider = new Provider($provider_details);
+		$provider->user = $user;
+		$provider->save();
 
 		return $user;
 	}

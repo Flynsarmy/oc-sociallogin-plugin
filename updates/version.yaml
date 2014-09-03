@@ -4,3 +4,4 @@
 1.0.2: Require RainLab.User
 1.0.3: Fixed RainLab.User integration
 1.0.4: User registration bug fix
+1.0.5: Fix password confirmation error
