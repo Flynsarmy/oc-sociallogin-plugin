@@ -86,6 +86,7 @@ class Twitter extends SocialLoginProviderBase
 
 		return [
 			'token' => $userProfile->identifier,
+			'login' => $userProfile->displayName,
 			'email' => substr($userProfile->profileURL, 19).'@dev.null',
 			'name' => trim($userProfile->firstName.' '.$userProfile->lastName),
 		];
