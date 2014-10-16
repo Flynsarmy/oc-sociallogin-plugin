@@ -77,7 +77,7 @@ class UserManager
 	public function registerUser(array $provider_details, array $user_details)
 	{
 		// Generate a random password for the new user
-		if ( !isset($user_details['login']) ) $user_details['login'] = $user_details['email'];
+		if ( !isset($user_details['username']) ) $user_details['username'] = $user_details['email'];
 		$user_details['password'] = $user_details['password_confirmation'] = str_random(16);
 
 		$user = Auth::register($user_details, true);

@@ -87,7 +87,7 @@ class Facebook extends SocialLoginProviderBase
 		return [
 			'token' => $userProfile->identifier,
 			'email' => $userProfile->email,
-			'login' => $userProfile->username ?: $userProfile->email,
+			'username' => $userProfile->username ?: $userProfile->email,
 			'name' => $userProfile->firstName.' '.$userProfile->lastName,
 		];
 	}
