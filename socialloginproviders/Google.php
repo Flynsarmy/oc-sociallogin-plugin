@@ -76,7 +76,7 @@ class Google extends SocialLoginProviderBase
 		// oauth2_client_id, oauth2_client_secret, and to register your oauth2_redirect_uri.
 		$client->setClientId( @$providers['Google']['client_id'] );
 		$client->setClientSecret( @$providers['Google']['client_secret'] );
-		$client->setRedirectUri( URL::route('flynsarmy_sociallogin_provider', ['Google']) );
+		$client->setRedirectUri( URL::route('flynsarmy_sociallogin_provider', ['Google'], true) );
 		// $client->setDeveloperKey('insert_your_developer_key');
 
 		$client->addScope('email');

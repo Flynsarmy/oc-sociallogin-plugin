@@ -21,6 +21,6 @@ class LoginProviders extends FormWidgetBase
 	public function prepareVars()
 	{
 		$this->vars['name'] = $this->formField->getName();
-		$this->vars['value'] = $this->model->{$this->columnName};
+		$this->vars['value'] = $this->model->{$this->valueFrom};
 	}
 }
