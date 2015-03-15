@@ -132,7 +132,7 @@ class Google extends SocialLoginProviderBase
 		Session::forget('access_token');
 
 		return [
-			'token' => $data['payload']['id'],
+			'token' => $client->getAccessToken(),
 			'email' => $data['payload']['email'],
 		];
 	}

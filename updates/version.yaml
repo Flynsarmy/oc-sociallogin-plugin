@@ -8,3 +8,4 @@
 1.0.6: Add login details when registering users
 1.0.7: Rename login to username to match RainLab.Users latest update
 1.0.8: RC compatibility update
+1.0.9: Google login fix
