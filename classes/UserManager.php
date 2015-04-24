@@ -62,7 +62,7 @@ class UserManager
 	public function findProvider(array $provider_details)
 	{
 		return Provider::where('provider_id', '=', $provider_details['provider_id'])
-			->where('provider_token', '=', $provider_details['provider_token'])
+			//->where('provider_token', '=', $provider_details['provider_token'])
 			->first();
 	}
 

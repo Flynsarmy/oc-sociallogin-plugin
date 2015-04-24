@@ -9,3 +9,4 @@
 1.0.7: Rename login to username to match RainLab.Users latest update
 1.0.8: RC compatibility update
 1.0.9: Google login fix
+1.0.10: Don't add multiple Google associations to users
