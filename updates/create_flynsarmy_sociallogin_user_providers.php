@@ -15,7 +15,7 @@ class CreateFlynsarmySocialLoginUserProvidersTable extends Migration
             $table->integer('user_id')->unsigned()->index()->nullable();
             $table->string('provider_id')->default('');
             $table->string('provider_token')->default('');
-            $table->index(['provider_id', 'provider_token'], 'provider_id_provider_token_index');
+            $table->index(['provider_id', 'provider_token'], 'provider_id_token_index');
         });
     }
 
