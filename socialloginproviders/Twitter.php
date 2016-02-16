@@ -9,6 +9,8 @@ use URL;
 
 class Twitter extends SocialLoginProviderBase
 {
+	use \October\Rain\Support\Traits\Singleton;
+
 	public function isEnabled()
 	{
 		$providers = $this->settings->get('providers', []);
@@ -21,7 +23,7 @@ class Twitter extends SocialLoginProviderBase
 		$form->addFields([
 			'noop' => [
 				'type' => 'partial',
-				'path' => '@/plugins/flynsarmy/sociallogin/partials/backend/forms/settings/_twitter_info.htm',
+				'path' => '$/flynsarmy/sociallogin/partials/backend/forms/settings/_twitter_info.htm',
 				'tab' => 'Twitter',
 			],
 

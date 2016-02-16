@@ -5,8 +5,6 @@ use Flynsarmy\SocialLogin\Models\Settings;
 
 abstract class SocialLoginProviderBase
 {
-	use \October\Rain\Support\Traits\Singleton;
-
 	protected $settings;
 
 	/**
@@ -32,7 +30,7 @@ abstract class SocialLoginProviderBase
 	 * $form->addFields([
 	 *		'noop' => [
 	 *			'type' => 'partial',
-	 *			'path' => '@/plugins/flynsarmy/sociallogin/partials/backend/forms/settings/_google_info.htm',
+	 *			'path' => '$/flynsarmy/sociallogin/partials/backend/forms/settings/_google_info.htm',
 	 *			'tab' => 'Google',
 	 *		],
 	 *

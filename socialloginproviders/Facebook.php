@@ -9,6 +9,8 @@ use URL;
 
 class Facebook extends SocialLoginProviderBase
 {
+	use \October\Rain\Support\Traits\Singleton;
+
 	public function isEnabled()
 	{
 		$providers = $this->settings->get('providers', []);
@@ -21,7 +23,7 @@ class Facebook extends SocialLoginProviderBase
 		$form->addFields([
 			'noop' => [
 				'type' => 'partial',
-				'path' => '@/plugins/flynsarmy/sociallogin/partials/backend/forms/settings/_facebook_info.htm',
+				'path' => '$/flynsarmy/sociallogin/partials/backend/forms/settings/_facebook_info.htm',
 				'tab' => 'Facebook',
 			],
 
