@@ -14,6 +14,14 @@ class Google extends SocialLoginProviderBase
 {
 	use \October\Rain\Support\Traits\Singleton;
 
+	/**
+	 * Initialize the singleton free from constructor parameters.
+	 */
+	protected function init()
+	{
+		parent::init();
+	}
+
 	public function isEnabled()
 	{
 		$providers = $this->settings->get('providers', []);
