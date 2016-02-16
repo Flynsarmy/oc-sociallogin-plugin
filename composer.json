@@ -1,7 +1,7 @@
 {
     "name": "flynsarmy/sociallogin",
     "require": {
-        "hybridauth/hybridauth": "2.5.*",
-        "google/apiclient": "1.1.*"
+        "hybridauth/hybridauth": "2.6.*",
+        "google/apiclient": "^2.0.0@RC"
     }
 }

@@ -62,7 +62,7 @@ class UserManager
 	public function findProvider(array $provider_details)
 	{
 		return Provider::where('provider_id', '=', $provider_details['provider_id'])
-			//->where('provider_token', '=', $provider_details['provider_token'])
+			->where('provider_token', '=', $provider_details['provider_token'])
 			->first();
 	}
 
@@ -94,6 +94,10 @@ class UserManager
 	 */
 	public function attachProvider(User $user, array $provider_details)
 	{
+		$user->flynsarmy_sociallogin_providers()
+			->where('provider_id', $provider_details['provider_id'])
+			->delete();
+
 		$provider = new Provider($provider_details);
 		$provider->user = $user;
 		$provider->save();

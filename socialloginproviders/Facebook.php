@@ -9,13 +9,6 @@ use URL;
 
 class Facebook extends SocialLoginProviderBase
 {
-	use \October\Rain\Support\Traits\Singleton;
-
-	public function __construct()
-	{
-		return parent::__construct();
-	}
-
 	public function isEnabled()
 	{
 		$providers = $this->settings->get('providers', []);

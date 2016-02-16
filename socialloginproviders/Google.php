@@ -12,13 +12,6 @@ use Session;
 
 class Google extends SocialLoginProviderBase
 {
-	use \October\Rain\Support\Traits\Singleton;
-
-	public function __construct()
-	{
-		return parent::__construct();
-	}
-
 	public function isEnabled()
 	{
 		$providers = $this->settings->get('providers', []);
@@ -83,11 +76,6 @@ class Google extends SocialLoginProviderBase
 		// $client->addScope(Google_Service_Plus::PLUS_ME);
 		// $client->addScope('profile');
 
-		$client->getIo()->setOptions(array(
-			CURLOPT_SSL_VERIFYPEER => false,
-			CURLOPT_SSL_VERIFYHOST => 2,
-		));
-
 		return $client;
 	}
 
@@ -127,13 +115,15 @@ class Google extends SocialLoginProviderBase
 			$client->refreshToken($refresh_token);
 		}
 
-		$data = $client->verifyIdToken()->getAttributes();
+		$data = $client->verifyIdToken();
 
 		Session::forget('access_token');
 
+		$access_token = $client->getAccessToken();
+
 		return [
-			'token' => $client->getAccessToken(),
-			'email' => $data['payload']['email'],
+			'token' => $access_token['access_token'],
+			'email' => $data['email'],
 		];
 	}
 }

@@ -5,9 +5,14 @@ use Flynsarmy\SocialLogin\Models\Settings;
 
 abstract class SocialLoginProviderBase
 {
+	use \October\Rain\Support\Traits\Singleton;
+
 	protected $settings;
 
-	public function __construct()
+	/**
+	 * Initialize the singleton free from constructor parameters.
+	 */
+	protected function init()
 	{
 		$this->settings = Settings::instance();
 	}
