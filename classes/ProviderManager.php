@@ -1,8 +1,5 @@
 <?php namespace Flynsarmy\SocialLogin\Classes;
 
-use URL;
-use Exception;
-use Hybrid_Provider_Adapter;
 use System\Classes\PluginManager;
 
 class ProviderManager
