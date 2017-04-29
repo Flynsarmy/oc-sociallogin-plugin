@@ -1,8 +1,13 @@
 <?php namespace Flynsarmy\SocialLogin;
 
+use App;
+use Backend;
 use Event;
+use URL;
+use Illuminate\Foundation\AliasLoader;
 use System\Classes\PluginBase;
 use RainLab\User\Models\User;
+use RainLab\User\Controllers\Users as UsersController;
 use Backend\Widgets\Form;
 use Flynsarmy\SocialLogin\Classes\ProviderManager;
 
@@ -15,6 +20,9 @@ use Flynsarmy\SocialLogin\Classes\ProviderManager;
  */
 class Plugin extends PluginBase
 {
+    // Make this plugin run on updates page
+    public $elevated = true;
+
 	public $require = ['RainLab.User'];
 
 	/**
@@ -54,10 +62,30 @@ class Plugin extends PluginBase
 
 	public function boot()
 	{
+	    // Load socialite
+        App::register('\Laravel\Socialite\SocialiteServiceProvider');
+        AliasLoader::getInstance()->alias('Socialite', 'Laravel\Socialite\Facades\Socialite');
+
 		User::extend(function($model) {
 			$model->hasMany['flynsarmy_sociallogin_providers'] = ['Flynsarmy\SocialLogin\Models\Provider'];
 		});
 
+		// Add 'Social Logins' column to users list
+        UsersController::extendListColumns(function($widget, $model) {
+            if (!$model instanceof \RainLab\User\Models\User)
+                return;
+
+            $widget->addColumns([
+                'flynsarmy_sociallogin_providers' => [
+                    'label'      => 'Social Logins',
+                    'type'       => 'partial',
+                    'path'       => '~/plugins/flynsarmy/sociallogin/models/provider/_provider_column.htm',
+                    'searchable' => false
+                ]
+            ]);
+        });
+
+        // Generate Social Login settings form
 		Event::listen('backend.form.extendFields', function(Form $form) {
 			if (!$form->getController() instanceof \System\Controllers\Settings) return;
 			if (!$form->model instanceof \Flynsarmy\SocialLogin\Models\Settings) return;
@@ -69,6 +97,7 @@ class Plugin extends PluginBase
 			}
 		});
 
+		// Add 'Social Providers' field to edit users form
 		Event::listen('backend.form.extendFields', function($widget) {
 			if (!$widget->getController() instanceof \RainLab\User\Controllers\Users) return;
 			if ($widget->getContext() != 'update') return;
@@ -80,6 +109,21 @@ class Plugin extends PluginBase
 				],
 			], 'secondary');
 		});
+
+		// Add backend login provider integration
+		Event::listen('backend.auth.extendSigninView', function() {
+            $providers = ProviderManager::instance()->listProviders();
+
+            $social_login_links = [];
+            foreach ( $providers as $provider_class => $provider_details )
+                if ( $provider_class::instance()->isEnabledForBackend() )
+                    $social_login_links[$provider_details['alias']] = URL::route('flynsarmy_sociallogin_provider', [$provider_details['alias']]).'?s='.Backend::url().'&f='.Backend::url('backend/auth/signin');
+
+            if ( !count($social_login_links) )
+                return;
+
+		    require __DIR__.'/partials/backend/_login.htm';
+        });
 	}
 
 	function register_flynsarmy_sociallogin_providers()

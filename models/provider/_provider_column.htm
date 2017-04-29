@@ -1,0 +1,5 @@
+<?php if ( $record->flynsarmy_sociallogin_providers->count() ): ?>
+    <?php foreach ( $record->flynsarmy_sociallogin_providers as $provider ): ?>
+        <i class="fa icon-<?= strtolower($provider->provider_id) ?>" data-toggle='tooltip' title="<?= $provider->provider_id ?>"></i>
+    <?php endforeach; ?>
+<?php endif;

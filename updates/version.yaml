@@ -15,3 +15,6 @@
 1.0.13: Deprecated code fix, settings page fix
 1.0.14: Singleton trait fix
 1.0.15: Compatibility fix with RainLab.GoogleAnalytics
+1.0.16:
+    - !!! Important update with breaking changes.
+    - update_provider_settings_locations_1016.php

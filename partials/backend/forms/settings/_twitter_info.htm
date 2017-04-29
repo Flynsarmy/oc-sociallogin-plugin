@@ -7,7 +7,7 @@
 		<ol>
 			<li>Go to <a target="_blanck" href="https://apps.twitter.com/">https://apps.twitter.com/</a> and create a new app.</li>
 			<li>Set Name to your site name, add a description.</li>
-			<li>Set <b>Website</b> to <span style="color:green"><?= URL::to('') ?></span> and <b>Callback URL</b> to <span style="color:green"><?= URL::route('flynsarmy_sociallogin_provider', ['Twitter']) ?></span></li>
+			<li>Set <b>Website</b> to <span style="color:green"><?= URL::to('') ?></span> and <b>Callback URL</b> to <span style="color:green"><?= URL::route('flynsarmy_sociallogin_provider_callback', ['Twitter']) ?></span></li>
 			<li>Click <b>Create your Twitter Application</b>.</li>
 			<li>Copy your <b>API Key</b> and <b>API Secret</b> from the <b>API Keys</b> tab and paste them below.</li>
 		</ol>

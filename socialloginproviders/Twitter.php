@@ -2,14 +2,16 @@
 
 use Backend\Widgets\Form;
 use Flynsarmy\SocialLogin\SocialLoginProviders\SocialLoginProviderBase;
-use Flynsarmy\SocialLogin\Models\Settings;
-use Hybrid_Endpoint;
-use Hybrid_Auth;
+use Socialite;
+use Laravel\Socialite\One\TwitterProvider;
+use League\OAuth1\Client\Server\Twitter as TwitterServer;
 use URL;
 
 class Twitter extends SocialLoginProviderBase
 {
 	use \October\Rain\Support\Traits\Singleton;
+
+	protected $driver = 'twitter';
 
 	/**
 	 * Initialize the singleton free from constructor parameters.
@@ -17,6 +19,20 @@ class Twitter extends SocialLoginProviderBase
 	protected function init()
 	{
 		parent::init();
+
+        // Socialite uses config files for credentials but we want to pass from
+        // our settings page - so override the login method for this provider
+        Socialite::extend($this->driver, function($app) {
+            $providers = \Flynsarmy\SocialLogin\Models\Settings::instance()->get('providers', []);
+            $providers['Twitter']['redirect'] = URL::route('flynsarmy_sociallogin_provider_callback', ['Twitter'], true);
+
+            return new TwitterProvider(
+                app()->request, new TwitterServer($providers['Twitter'])
+            );
+            return Socialite::buildProvider(
+                TwitterProvider::class, (array)@$providers['Twitter']
+            );
+        });
 	}
 
 	public function isEnabled()
@@ -25,6 +41,15 @@ class Twitter extends SocialLoginProviderBase
 
 		return !empty($providers['Twitter']['enabled']);
 	}
+
+    public function isEnabledForBackend()
+    {
+        //$providers = $this->settings->get('providers', []);
+        //
+        //return !empty($providers['Twitter']['enabledForBackend']);
+
+        return false;
+    }
 
 	public function extendSettingsForm(Form $form)
 	{
@@ -36,19 +61,30 @@ class Twitter extends SocialLoginProviderBase
 			],
 
 			'providers[Twitter][enabled]' => [
-				'label' => 'Enabled?',
+				'label' => 'Enabled on frontend?',
 				'type' => 'checkbox',
-				'default' => 'true',
-				'tab' => 'Twitter',
+                'comment' => 'Can frontend users log in with Twitter?',
+                'default' => 'true',
+				'span' => 'left',
+                'tab' => 'Twitter',
 			],
 
-			'providers[Twitter][api_key]' => [
+            //'providers[Twitter][enabledForBackend]' => [
+            //    'label' => 'Enabled on backend?',
+            //    'type' => 'checkbox',
+            //    'comment' => 'Can administrators log into the backend with Twitter?',
+            //    'default' => 'false',
+            //    'span' => 'right',
+            //    'tab' => 'Twitter',
+            //],
+
+			'providers[Twitter][identifier]' => [
 				'label' => 'API Key',
 				'type' => 'text',
 				'tab' => 'Twitter',
 			],
 
-			'providers[Twitter][api_secret]' => [
+			'providers[Twitter][secret]' => [
 				'label' => 'API Secret',
 				'type' => 'text',
 				'tab' => 'Twitter',
@@ -56,42 +92,26 @@ class Twitter extends SocialLoginProviderBase
 		], 'primary');
 	}
 
-	public function login($provider_name, $action)
-	{
-		// check URL segment
-		if ($action == "auth") {
-			Hybrid_Endpoint::process();
+    /**
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function redirectToProvider()
+    {
+        return Socialite::driver($this->driver)->redirect();
+    }
 
-			return;
-		}
+    /**
+     * Handles redirecting off to the login provider
+     *
+     * @return array
+     */
+    public function handleProviderCallback()
+    {
+        $user = Socialite::driver($this->driver)->user();
 
-		$providers = $this->settings->get('providers', []);
+        if ( empty($user->email) )
+            $user->email = $user->nickname.'@dev.null';
 
-		// create a HybridAuth object
-		$socialAuth = new Hybrid_Auth([
-			"base_url" => URL::route('flynsarmy_sociallogin_provider', [$provider_name, 'auth']),
-			"providers" => [
-				'Twitter' => [
-					"enabled" => true,
-					"keys"    => array ( "key" => @$providers['Twitter']['api_key'], "secret" => @$providers['Twitter']['api_secret'] ),
-					// "scope"   => "email, user_about_me",
-				]
-			],
-		]);
-
-		// authenticate with Twitter
-		$provider = $socialAuth->authenticate($provider_name);
-
-		// fetch user profile
-		$userProfile = $provider->getUserProfile();
-
-		$provider->logout();
-
-		return [
-			'token' => $userProfile->identifier,
-			'username' => $userProfile->displayName,
-			'email' => substr($userProfile->profileURL, 19).'@dev.null',
-			'name' => trim($userProfile->firstName.' '.$userProfile->lastName),
-		];
-	}
+        return (array)$user;
+    }
 }

@@ -2,14 +2,15 @@
 
 use Backend\Widgets\Form;
 use Flynsarmy\SocialLogin\SocialLoginProviders\SocialLoginProviderBase;
-use Flynsarmy\SocialLogin\Models\Settings;
-use Hybrid_Endpoint;
-use Hybrid_Auth;
+use Socialite;
+use Laravel\Socialite\Two\FacebookProvider;
 use URL;
 
 class Facebook extends SocialLoginProviderBase
 {
 	use \October\Rain\Support\Traits\Singleton;
+
+	protected $driver = 'facebook';
 
 	/**
 	 * Initialize the singleton free from constructor parameters.
@@ -17,6 +18,17 @@ class Facebook extends SocialLoginProviderBase
 	protected function init()
 	{
 		parent::init();
+
+        // Socialite uses config files for credentials but we want to pass from
+        // our settings page - so override the login method for this provider
+        Socialite::extend($this->driver, function($app) {
+            $providers = \Flynsarmy\SocialLogin\Models\Settings::instance()->get('providers', []);
+            $providers['Facebook']['redirect'] = URL::route('flynsarmy_sociallogin_provider_callback', ['Facebook'], true);
+
+            return Socialite::buildProvider(
+                FacebookProvider::class, (array)@$providers['Facebook']
+            );
+        });
 	}
 
 	public function isEnabled()
@@ -25,6 +37,13 @@ class Facebook extends SocialLoginProviderBase
 
 		return !empty($providers['Facebook']['enabled']);
 	}
+
+    public function isEnabledForBackend()
+    {
+        $providers = $this->settings->get('providers', []);
+
+        return !empty($providers['Facebook']['enabledForBackend']);
+    }
 
 	public function extendSettingsForm(Form $form)
 	{
@@ -36,19 +55,30 @@ class Facebook extends SocialLoginProviderBase
 			],
 
 			'providers[Facebook][enabled]' => [
-				'label' => 'Enabled?',
+                'label' => 'Enabled on frontend?',
 				'type' => 'checkbox',
-				'default' => 'true',
+                'comment' => 'Can frontend users log in with Facebook?',
+                'default' => 'true',
+                'span' => 'left',
 				'tab' => 'Facebook',
 			],
 
-			'providers[Facebook][app_id]' => [
+            'providers[Facebook][enabledForBackend]' => [
+                'label' => 'Enabled on backend?',
+                'type' => 'checkbox',
+                'comment' => 'Can administrators log into the backend with Facebook?',
+                'default' => 'false',
+                'span' => 'right',
+                'tab' => 'Facebook',
+            ],
+
+			'providers[Facebook][client_id]' => [
 				'label' => 'App ID',
 				'type' => 'text',
 				'tab' => 'Facebook',
 			],
 
-			'providers[Facebook][app_secret]' => [
+			'providers[Facebook][client_secret]' => [
 				'label' => 'App Secret',
 				'type' => 'text',
 				'tab' => 'Facebook',
@@ -56,42 +86,23 @@ class Facebook extends SocialLoginProviderBase
 		], 'primary');
 	}
 
-	public function login($provider_name, $action)
-	{
-		// check URL segment
-		if ($action == "auth") {
-			Hybrid_Endpoint::process();
+    /**
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function redirectToProvider()
+    {
+        return Socialite::driver($this->driver)->scopes(['email', 'user_about_me'])->redirect();
+    }
 
-			return;
-		}
+    /**
+     * Handles redirecting off to the login provider
+     *
+     * @return array
+     */
+    public function handleProviderCallback()
+    {
+        $user = Socialite::driver($this->driver)->user();
 
-		$providers = $this->settings->get('providers', []);
-
-		// create a HybridAuth object
-		$socialAuth = new Hybrid_Auth([
-			"base_url" => URL::route('flynsarmy_sociallogin_provider', [$provider_name, 'auth']),
-			"providers" => [
-				'Facebook' => [
-					"enabled" => true,
-					"keys"    => array ( "id" => @$providers['Facebook']['app_id'], "secret" => @$providers['Facebook']['app_secret'] ),
-					"scope"   => "email, user_about_me",
-				]
-			],
-		]);
-
-		// authenticate with Facebook
-		$provider = $socialAuth->authenticate($provider_name);
-
-		// fetch user profile
-		$userProfile = $provider->getUserProfile();
-
-		$provider->logout();
-
-		return [
-			'token' => $userProfile->identifier,
-			'email' => $userProfile->email,
-			'username' => $userProfile->username ?: $userProfile->email,
-			'name' => $userProfile->firstName.' '.$userProfile->lastName,
-		];
-	}
+        return (array)$user;
+    }
 }

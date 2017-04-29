@@ -2,17 +2,14 @@
 
 use Backend\Widgets\Form;
 use Flynsarmy\SocialLogin\SocialLoginProviders\SocialLoginProviderBase;
-use Flynsarmy\SocialLogin\Models\Settings;
-use Google_Client;
-use Google_Service_Plus;
-use Redirect;
+use Socialite;
+use Laravel\Socialite\Two\GoogleProvider;
 use URL;
-use Input;
-use Session;
 
 class Google extends SocialLoginProviderBase
 {
 	use \October\Rain\Support\Traits\Singleton;
+	protected $driver = 'google';
 
 	/**
 	 * Initialize the singleton free from constructor parameters.
@@ -20,6 +17,17 @@ class Google extends SocialLoginProviderBase
 	protected function init()
 	{
 		parent::init();
+
+		// Socialite uses config files for credentials but we want to pass from
+        // our settings page - so override the login method for this provider
+		Socialite::extend($this->driver, function($app) {
+            $providers = \Flynsarmy\SocialLogin\Models\Settings::instance()->get('providers', []);
+            $providers['Google']['redirect'] = URL::route('flynsarmy_sociallogin_provider_callback', ['Google'], true);
+
+            return Socialite::buildProvider(
+                GoogleProvider::class, (array)@$providers['Google']
+            );
+        });
 	}
 
 	public function isEnabled()
@@ -28,6 +36,13 @@ class Google extends SocialLoginProviderBase
 
 		return !empty($providers['Google']['enabled']);
 	}
+
+    public function isEnabledForBackend()
+    {
+        $providers = $this->settings->get('providers', []);
+
+        return !empty($providers['Google']['enabledForBackend']);
+    }
 
 	public function extendSettingsForm(Form $form)
 	{
@@ -39,11 +54,22 @@ class Google extends SocialLoginProviderBase
 			],
 
 			'providers[Google][enabled]' => [
-				'label' => 'Enabled?',
+				'label' => 'Enabled on frontend?',
 				'type' => 'checkbox',
-				'default' => 'true',
-				'tab' => 'Google',
+                'comment' => 'Can frontend users log in with Google?',
+                'default' => 'true',
+				'span' => 'left',
+                'tab' => 'Google',
 			],
+
+            'providers[Google][enabledForBackend]' => [
+                'label' => 'Enabled on backend?',
+                'type' => 'checkbox',
+                'comment' => 'Can administrators log into the backend with Google?',
+                'default' => 'false',
+                'span' => 'right',
+                'tab' => 'Google',
+            ],
 
 			'providers[Google][app_name]' => [
 				'label' => 'Application Name',
@@ -67,73 +93,21 @@ class Google extends SocialLoginProviderBase
 		], 'primary');
 	}
 
-	protected function getClient()
+    /**
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+	public function redirectToProvider()
+    {
+        return Socialite::driver($this->driver)->redirect();
+    }
+
+    /**
+     * Handles redirecting off to the login provider
+     *
+     * @return array
+     */
+	public function handleProviderCallback()
 	{
-		$providers = $this->settings->get('providers', []);
-
-		$client = new Google_Client();
-		$client->setApplicationName(@$providers['Google']['app_name'] ?: 'Social Login');
-		$client->setApprovalPrompt('auto');
-		$client->setAccessType('offline');
-		// Visit https://code.google.com/apis/console?api=plus to generate your
-		// oauth2_client_id, oauth2_client_secret, and to register your oauth2_redirect_uri.
-		$client->setClientId( @$providers['Google']['client_id'] );
-		$client->setClientSecret( @$providers['Google']['client_secret'] );
-		$client->setRedirectUri( URL::route('flynsarmy_sociallogin_provider', ['Google'], true) );
-		// $client->setDeveloperKey('insert_your_developer_key');
-
-		$client->addScope('email');
-		// $client->addScope(Google_Service_Plus::PLUS_ME);
-		// $client->addScope('profile');
-
-		return $client;
-	}
-
-
-
-	public function login($provider_name, $action)
-	{
-		$client = $this->getClient();
-
-		if ( Input::has('logout') )
-		{
-			Session::forget('access_token');
-			return;
-		}
-
-		if ( Input::has('code') )
-		{
-			$client->authenticate( Input::get('code') );
-			Session::put('access_token', $client->getAccessToken());
-		}
-
-		if ( Session::has('access_token') )
-			$client->setAccessToken( Session::get('access_token') );
-		else
-		{
-			$authUrl = $client->createAuthUrl();
-			// Redirect::to() doesn't work here. Send header manually.
-			header("Location: $authUrl");
-			exit;
-		}
-
-		// http://stackoverflow.com/questions/9241213/how-to-refresh-token-with-google-api-client
-		if ( $client->isAccessTokenExpired() )
-		{
-			$decoded_token = json_decode($client->getAccessToken());
-			$refresh_token = $decoded_token->refresh_token;
-			$client->refreshToken($refresh_token);
-		}
-
-		$data = $client->verifyIdToken();
-
-		Session::forget('access_token');
-
-		$access_token = $client->getAccessToken();
-
-		return [
-			'token' => $access_token['access_token'],
-			'email' => $data['email'],
-		];
+	    return (array)Socialite::driver($this->driver)->user();
 	}
 }

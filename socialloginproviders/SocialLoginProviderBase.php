@@ -22,6 +22,13 @@ abstract class SocialLoginProviderBase
 	 */
 	abstract public function isEnabled();
 
+    /**
+     * Return true if the settings form has the 'enabledForBackend' box checked.
+     *
+     * @return boolean
+     */
+    abstract public function isEnabledForBackend();
+
 	/**
 	 * Add any provider-specific settings to the settings form. Add a partial
 	 * with a set of steps to follow to retrieve the credentials, an enabled
@@ -56,6 +63,15 @@ abstract class SocialLoginProviderBase
 	 */
 	abstract public function extendSettingsForm(Form $form);
 
+    /**
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    abstract public function redirectToProvider();
 
-	abstract public function login($provider_name, $action);
+    /**
+     * Handles redirecting off to the login provider
+     *
+     * @return array
+     */
+	abstract public function handleProviderCallback();
 }

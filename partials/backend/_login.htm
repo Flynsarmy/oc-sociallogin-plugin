@@ -1,0 +1,12 @@
+<hr>
+<h2>
+    or login with
+    <?php
+        $links = [];
+        foreach ( $social_login_links as $name => $link ):
+            $links[] = '<a href="'. $link .'" class="text-muted"><i class="fa icon-'. strtolower($name) .'" aria-hidden="true" title="'. $name .'"> '.$name.'</i></a>';
+        endforeach;
+
+        echo implode(', ', $links);
+    ?>
+</h2>

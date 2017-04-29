@@ -1,12 +1,35 @@
 <?php namespace Flynsarmy\SocialLogin\Classes;
 
 use Auth;
+use BackendAuth;
 use October\Rain\Auth\Models\User;
 use Flynsarmy\SocialLogin\Models\Provider;
 
 class UserManager
 {
 	use \October\Rain\Support\Traits\Singleton;
+
+    /**
+     * Finds a backend user by the email address.
+     * @param string $email
+     */
+    public function findBackendUserByEmail($email)
+    {
+        $query = $this->createBackendUserModelQuery();
+        $user = $query->where('email', $email)->first();
+        return $user ?: null;
+    }
+
+    /**
+     * Prepares a query derived from the user model.
+     */
+    protected function createBackendUserModelQuery()
+    {
+        $model = BackendAuth::createUserModel();
+        $query = $model->newQuery();
+        BackendAuth::extendUserQuery($query);
+        return $query;
+    }
 
 	/**
 	 * Finds and returns the user attached to the given provider. If one doesn't
@@ -76,8 +99,18 @@ class UserManager
 	 */
 	public function registerUser(array $provider_details, array $user_details)
 	{
-		// Generate a random password for the new user
-		if ( !isset($user_details['username']) ) $user_details['username'] = $user_details['email'];
+        // Support custom login handling
+        $user = Event::fire('flynsarmy.sociallogin.registerUser', [
+            $provider_details, $user_details
+        ], true);
+        if ( $user )
+            return $user;
+
+	    // Create a username if one doesn't exist
+		if ( !isset($user_details['username']) )
+		    $user_details['username'] = $user_details['email'];
+
+        // Generate a random password for the new user
 		$user_details['password'] = $user_details['password_confirmation'] = str_random(16);
 
 		$user = Auth::register($user_details, true);

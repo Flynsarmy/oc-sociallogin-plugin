@@ -5,11 +5,13 @@
 	</div>
 	<div class="content">
 		<ol>
-			<li>Go to <a target="_blanck" href="https://console.developers.google.com/project">https://console.developers.google.com/project</a> and create a new project.</li>
-			<li>Go to <b>APIs &amp; Auth - APIs</b> and enable <b>Google+ API</b> and <b>Google+ Domains API</b></li>
-			<li>Go to <b>APIs &amp; Auth - Credentials</b> and click on <b>Create new client ID</b>. A pop-up named <b>"Create Client ID"</b> will appear.</li>
-			<li>Select <b>Web Application</b>. Set <b>Authorized JavaScript Origins</b> to <span style="color:green"><?= URL::to('') ?></span> and <b>Authorized Redirect URI</b> to <span style="color:green"><?= URL::route('flynsarmy_sociallogin_provider', ['Google']) ?></span></li>
-			<li>Click <b>Create Client ID</b>.</li>
+			<li>Go to <a target="_blanck" href="https://console.developers.google.com/project">https://console.developers.google.com/project</a> and create a new project. Name it something like <strong>October Social Login</strong>.</li>
+			<li>Under <strong>Social APIs</strong> enable <strong>Google+ API</strong> and <strong>Google+ Domains API</strong>.</li>
+			<li>Go to <strong>Credentials</strong> on the left and then the <strong>OAuth consent screen</strong> tab at the top</li>
+			<li>Enter a product name - this will be visible to the end user so perhaps something like <strong>&lt;Your Site Name&gt; Login</strong>. All other details are optional.</li>
+			<li>Go to <strong>Credentials</strong> on the left and click <strong>Create credentials - OAuth client ID</strong> then <strong>Web application</strong>. A screen titled <strong>Create Client ID</strong> will appear.</li>
+			<li>Name the Web application the same as your product name entered above. Set <strong>Authorized JavaScript Origins</strong> to <span style="color:green"><?= URL::to('') ?></span> and <b>Authorized Redirect URI</b> to <span style="color:green"><?= URL::route('flynsarmy_sociallogin_provider_callback', ['Google']) ?></span></li>
+			<li>Click <strong>Create</strong>.</li>
 		</ol>
 	</div>
 </div>
