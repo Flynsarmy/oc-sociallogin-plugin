@@ -2,6 +2,7 @@
 
 use Auth;
 use BackendAuth;
+use Event;
 use October\Rain\Auth\Models\User;
 use Flynsarmy\SocialLogin\Models\Provider;
 
