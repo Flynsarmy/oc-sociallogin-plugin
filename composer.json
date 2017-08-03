@@ -1,9 +1,6 @@
 {
     "name": "flynsarmy/sociallogin",
     "require": {
-        "laravel/socialite": "2.0.*"
-    },
-    "replace": {
-        "illuminate/contracts": "5.2.*"
+        "laravel/socialite": "3.0.*"
     }
 }
