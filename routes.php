@@ -1,7 +1,7 @@
 <?php
 
 // http://home.flynsarmy.com/flynsarmy/sociallogin/Google?s=/&f=/login
-Route::get('flynsarmy/sociallogin/{provider}', array("as" => "flynsarmy_sociallogin_provider", function($provider_name, $action = "")
+Route::get('flynsarmy/sociallogin/{provider}', array("as" => "flynsarmy_sociallogin_provider", 'middleware' => ['web'], function($provider_name, $action = "")
 {
     $success_redirect = Input::get('s', '/');
 	$error_redirect = Input::get('f', '/login');
@@ -19,7 +19,7 @@ Route::get('flynsarmy/sociallogin/{provider}', array("as" => "flynsarmy_sociallo
 	return $provider->redirectToProvider();
 }))->where(['provider' => '[A-Z][a-zA-Z ]+']);
 
-Route::get('flynsarmy/sociallogin/{provider}/callback', ['as' => 'flynsarmy_sociallogin_provider_callback', function($provider_name) {
+Route::get('flynsarmy/sociallogin/{provider}/callback', ['as' => 'flynsarmy_sociallogin_provider_callback', 'middleware' => ['web'], function($provider_name) {
     $success_redirect = Session::get('flynsarmy_sociallogin_successredirect', '/');
     $error_redirect = Session::get('flynsarmy_sociallogin_errorredirect', '/login');
 
