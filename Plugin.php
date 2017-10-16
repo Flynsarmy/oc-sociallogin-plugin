@@ -48,7 +48,8 @@ class Plugin extends PluginBase
 				'description' => 'Manage Social Login providers.',
 				'icon'        => 'icon-users',
 				'class'       => 'Flynsarmy\SocialLogin\Models\Settings',
-				'order'       => 600
+				'order'       => 600,
+                'permissions' => ['rainlab.users.access_settings'],
 			]
 		];
 	}

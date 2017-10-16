@@ -20,3 +20,4 @@
     - update_provider_settings_locations_1016.php
 1.0.17: Fixed issue registering new users
 1.0.18: !!! Requires October build 420 or higher.
+1.0.19: Add backend permission requirement
