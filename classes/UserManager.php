@@ -104,8 +104,10 @@ class UserManager
         $user = Event::fire('flynsarmy.sociallogin.registerUser', [
             $provider_details, $user_details
         ], true);
-        if ( $user )
+        if ( $user ){
+			$this->attachAvatar($user, $user_details);
             return $user;
+		}	
 
 	    // Create a username if one doesn't exist
 		if ( !isset($user_details['username']) )
@@ -115,8 +117,82 @@ class UserManager
 		$user_details['password'] = $user_details['password_confirmation'] = str_random(16);
 
 		$user = Auth::register($user_details, true);
+		$this->attachAvatar($user, $user_details);
+		
 		return $this->attachProvider($user, $provider_details);
 	}
+	
+	
+	/**
+	 * Attach avatar to a user
+	 *
+	 * @param  User   $user
+	 * @param  array $user_details       ['email'=>..., ...]
+	 *
+	 */
+	 
+	public function attachAvatar(User $user, array $user_details)
+	{
+			
+			if (array_key_exists("avatar_original",$user_details)){
+				$thumbOptions = [
+						'mode'      => 'crop',
+						'extension' => 'auto'
+				];
+				
+				if (!empty($user_details['avatar_original'])){
+					$file = new File;
+					$saveto = tempnam($file->getTempPath(), 'user_id_'.$user->id.'_avatar');
+					$saveToImage = $saveto.'.jpg';
+					rename($saveto, $saveToImage); 
+					self::grab_image($user_details['avatar_original'], $saveToImage);
+					
+					$file->data = $saveToImage; 
+		
+					if ($file->data && filesize($saveToImage)>0){
+						$thumb = $file->getThumb('160', '160', $thumbOptions);	
+						$file->save();
+						$user->avatar()->add($file);
+						$file->pathUrl = $file->getPath();
+						$file->thumbUrl = $thumb;
+					}	
+				}	
+			}	
+
+	}
+	
+	
+	/**
+	 * grab image and store locally 
+	 *
+	 * @param  $url
+	 * @param  $saveto
+	 */
+	public static function grab_image($url,$saveto){
+		
+		if (empty($url) || empty($saveto))
+			return;
+
+		$ch = curl_init ($url);
+		
+		if (strpos($url, 'facebook.com') !== false) {
+			curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true); 
+		}
+
+	    curl_setopt($ch, CURLOPT_HEADER, 0);
+	    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+	    curl_setopt($ch, CURLOPT_BINARYTRANSFER,1);
+	    $raw=curl_exec($ch);
+	    curl_close ($ch);
+	    if(file_exists($saveto)){
+	        unlink($saveto);
+	    }
+	    $fp = fopen($saveto,'x');
+	    fwrite($fp, $raw);
+	    fclose($fp);
+	}	
+	
+	
 
 	/**
 	 * Attach a provider to a user
