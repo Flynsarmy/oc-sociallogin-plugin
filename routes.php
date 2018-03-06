@@ -66,7 +66,7 @@ Route::get('flynsarmy/sociallogin/{provider}/callback', ['as' => 'flynsarmy_soci
             $provider_details, $provider_response, $user
         ], true);
         if ( $result )
-            return;
+            return $result;
 
         BackendAuth::login($user, true);
 
@@ -90,7 +90,7 @@ Route::get('flynsarmy/sociallogin/{provider}/callback', ['as' => 'flynsarmy_soci
             $provider_details, $provider_response, $user
         ], true);
         if ( $result )
-            return;
+            return $result;
 
         Auth::login($user);
     }
