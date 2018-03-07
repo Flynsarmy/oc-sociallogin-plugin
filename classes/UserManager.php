@@ -5,6 +5,9 @@ use BackendAuth;
 use Event;
 use October\Rain\Auth\Models\User;
 use Flynsarmy\SocialLogin\Models\Provider;
+use System\Models\File;
+use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Client;
 
 class UserManager
 {
@@ -104,6 +107,7 @@ class UserManager
         $user = Event::fire('flynsarmy.sociallogin.registerUser', [
             $provider_details, $user_details
         ], true);
+		
         if ( $user ){
 			$this->attachAvatar($user, $user_details);
             return $user;
@@ -170,29 +174,19 @@ class UserManager
 	 */
 	public static function grab_image($url,$saveto){
 		
-		if (empty($url) || empty($saveto))
-			return;
+		$client = new Client(); 
+		$profileResponse = $client->get($url);
+		$profilePicture = $profileResponse->getBody();
 
-		$ch = curl_init ($url);
-		
-		if (strpos($url, 'facebook.com') !== false) {
-			curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true); 
-		}
-
-	    curl_setopt($ch, CURLOPT_HEADER, 0);
-	    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-	    curl_setopt($ch, CURLOPT_BINARYTRANSFER,1);
-	    $raw=curl_exec($ch);
-	    curl_close ($ch);
+		trace_log($profilePicture);
 	    if(file_exists($saveto)){
 	        unlink($saveto);
 	    }
 	    $fp = fopen($saveto,'x');
-	    fwrite($fp, $raw);
+	    fwrite($fp, $profilePicture);
 	    fclose($fp);
+		trace_log($profilePicture);
 	}	
-	
-	
 
 	/**
 	 * Attach a provider to a user
