@@ -5,6 +5,9 @@ use BackendAuth;
 use Event;
 use October\Rain\Auth\Models\User;
 use Flynsarmy\SocialLogin\Models\Provider;
+use Flash;
+use Lang;
+use RainLab\User\Models\Settings as UserSettings;
 
 class UserManager
 {
@@ -53,8 +56,13 @@ class UserManager
 			// No user with this email exists - create one
 			if ( !$user )
 			{
-				// Register the user
-				$user = $this->registerUser($provider_details, $user_details);
+				if (UserSettings::get('allow_registration')) {
+					// Register the user
+					$user = $this->registerUser($provider_details, $user_details);
+				} else {
+					Flash::warning(Lang::get('rainlab.user::lang.account.registration_disabled'));
+					return $user;
+				}
 			}
 			// User was found - attach provider
 			else
