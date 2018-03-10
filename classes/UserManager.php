@@ -5,9 +5,15 @@ use BackendAuth;
 use Event;
 use October\Rain\Auth\Models\User;
 use Flynsarmy\SocialLogin\Models\Provider;
+use Flash;
+use Lang;
+use RainLab\User\Models\Settings as UserSettings;
 use System\Models\File;
-use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Client;
+use GuzzleHttp\Psr7;
+use GuzzleHttp\Exception\RequestException;
+use Exception;
+use Log;
 
 class UserManager
 {
@@ -56,8 +62,13 @@ class UserManager
 			// No user with this email exists - create one
 			if ( !$user )
 			{
-				// Register the user
-				$user = $this->registerUser($provider_details, $user_details);
+				if (UserSettings::get('allow_registration')) {
+					// Register the user
+					$user = $this->registerUser($provider_details, $user_details);
+				} else {
+					Flash::warning(Lang::get('rainlab.user::lang.account.registration_disabled'));
+					return $user;
+				}
 			}
 			// User was found - attach provider
 			else
@@ -175,17 +186,26 @@ class UserManager
 	public static function grab_image($url,$saveto){
 		
 		$client = new Client(); 
-		$profileResponse = $client->get($url);
-		$profilePicture = $profileResponse->getBody();
+		
+		try {
+			$profileResponse = $client->get($url);
+			$profilePicture = $profileResponse->getBody();
 
-		trace_log($profilePicture);
-	    if(file_exists($saveto)){
-	        unlink($saveto);
-	    }
-	    $fp = fopen($saveto,'x');
-	    fwrite($fp, $profilePicture);
-	    fclose($fp);
-		trace_log($profilePicture);
+			if(file_exists($saveto)){
+				unlink($saveto);
+			}
+			$fp = fopen($saveto,'x');
+			fwrite($fp, $profilePicture);
+			fclose($fp);
+		}catch (RequestException $e) {
+			if ($e->hasResponse()) {
+				Log::error(Psr7\str($e->getResponse()));
+			}else{
+				Log::error($e->getMessage() . ' in ' . $e->getFile() . ' on line ' . $e->getLine());
+			}
+		}catch (Exception $e) {
+			Log::error($e->getMessage() . ' in ' . $e->getFile() . ' on line ' . $e->getLine());
+		}
 	}	
 
 	/**
