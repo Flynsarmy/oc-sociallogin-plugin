@@ -21,3 +21,8 @@
 1.0.17: Fixed issue registering new users
 1.0.18: !!! Requires October build 420 or higher.
 1.0.19: Add backend permission requirement
+1.0.20:
+    - Upgrade to latest socialite
+    - Prevent users from registering when Allow user registration is OFF (Thanks to Kurt Jensen)
+    - Grab user profile picture on account registration (Thanks to kdoonboli)
+    - Fix redirects on custom login (Thanks to kdoonboli)
