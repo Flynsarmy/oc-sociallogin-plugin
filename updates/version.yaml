@@ -26,3 +26,6 @@
     - Prevent users from registering when Allow user registration is OFF (Thanks to Kurt Jensen)
     - Grab user profile picture on account registration (Thanks to kdoonboli)
     - Fix redirects on custom login (Thanks to kdoonboli)
+1.0.21:
+    - Update socialite
+    - Remove deprecated Facebook scope
