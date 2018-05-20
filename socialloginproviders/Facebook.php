@@ -91,7 +91,7 @@ class Facebook extends SocialLoginProviderBase
      */
     public function redirectToProvider()
     {
-        return Socialite::driver($this->driver)->scopes(['email', 'user_about_me'])->redirect();
+        return Socialite::driver($this->driver)->scopes(['email'])->redirect();
     }
 
     /**
