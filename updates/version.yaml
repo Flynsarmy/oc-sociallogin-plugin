@@ -29,3 +29,7 @@
 1.0.21:
     - Update socialite
     - Remove deprecated Facebook scope
+1.0.22:
+    - Bug fix in Rainlab.Users pages
+    - Update socialite
+    - Attached providers now display on both preview and update pages (previously just update page)

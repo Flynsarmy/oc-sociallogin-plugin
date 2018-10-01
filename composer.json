@@ -1,6 +1,6 @@
 {
     "name": "flynsarmy/sociallogin",
     "require": {
-        "laravel/socialite": "3.0.*"
+        "laravel/socialite": "3.1.*"
     }
 }
