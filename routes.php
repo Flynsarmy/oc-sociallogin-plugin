@@ -48,13 +48,13 @@ Route::get('flynsarmy/sociallogin/{provider}/callback', ['as' => 'flynsarmy_soci
         'provider_id' => $provider_name,
         'provider_token' => $provider_response['token'],
     ];
-    $user_details = array_except($provider_response, 'token');
+    $user_details = $provider_response['profile'];
 
     // Backend logins
     if ( $success_redirect == Backend::url() )
     {
         $user = Flynsarmy\SocialLogin\Classes\UserManager::instance()
-            ->findBackendUserByEmail($user_details['email']);
+            ->findBackendUserByEmail($user_details->email);
 
         if ( !$user )
             throw new October\Rain\Auth\AuthException(sprintf(

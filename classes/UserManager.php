@@ -12,6 +12,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Psr7;
 use GuzzleHttp\Exception\RequestException;
 use October\Rain\Auth\Models\User;
+use Hybridauth\User\Profile;
 use RainLab\User\Models\Settings as UserSettings;
 use System\Models\File;
 
@@ -45,12 +46,14 @@ class UserManager
      * Finds and returns the user attached to the given provider. If one doesn't
      * exist, it's created. If one exists but isn't attached, it's attached.
      *
-     * @param  array $provider_details   ['id'=>..., 'token'=>...]
-     * @param  array $user_details       ['email'=>..., ...]
+     * @param  array   $provider_details   ['id'=>..., 'token'=>...]
+     * @param  Profile $user_details
+     *
+     * @throws Exception
      *
      * @return User
      */
-    public function find(array $provider_details, array $user_details)
+    public function find(array $provider_details, Profile $user_details)
     {
         // Are we already attached?
         $provider = $this->findProvider($provider_details);
@@ -58,7 +61,7 @@ class UserManager
         if ( !$provider )
         {
             // Does a user with this email exist?
-            $user = Auth::findUserByLogin( $user_details['email'] );
+            $user = Auth::findUserByLogin( $user_details->email );
             // No user with this email exists - create one
             if ( !$user )
             {
@@ -107,19 +110,19 @@ class UserManager
     /**
      * Register a new user with given details and attach a provider to them.
      *
-     * @param  array $provider_details   ['id'=>..., 'token'=>...]
-     * @param  array $user_details       ['email'=>..., ...]
+     * @param  array   $provider_details   ['id'=>..., 'token'=>...]
+     * @param  Profile $user_details
      *
      * @return User
      */
-    public function registerUser(array $provider_details, array $user_details)
+    public function registerUser(array $provider_details, Profile $user_details)
     {
         // Support custom login handling
         $user = Event::fire('flynsarmy.sociallogin.registerUser', [
             $provider_details, $user_details
         ], true);
 
-        if ( $user ){
+        if ( $user && $user instanceof User ){
             $this->attachAvatar($user, $user_details);
             return $user;
         }
@@ -141,14 +144,14 @@ class UserManager
     /**
      * Attach avatar to a user
      *
-     * @param  User   $user
-     * @param  array $user_details       ['email'=>..., ...]
+     * @param  User    $user
+     * @param  Profile $user_details
      *
      */
 
-    public function attachAvatar(User $user, array $user_details)
+    public function attachAvatar(User $user, Profile $user_details)
     {
-        if (array_key_exists("avatar_original",$user_details))
+        if ( $user_details->photoURL )
         {
             $thumbOptions = [
                     'mode'      => 'crop',
@@ -161,7 +164,7 @@ class UserManager
                 $saveto = tempnam($file->getTempPath(), 'user_id_'.$user->id.'_avatar');
                 $saveToImage = $saveto.'.jpg';
                 rename($saveto, $saveToImage);
-                self::grab_image($user_details['avatar_original'], $saveToImage);
+                self::grab_image($user_details->photoURL, $saveToImage);
 
                 $file->data = $saveToImage;
 
@@ -184,7 +187,7 @@ class UserManager
      * @param  $url
      * @param  $saveto
      */
-    public static function grab_image($url,$saveto)
+    public static function grab_image($url, $saveto)
     {
         $client = new Client();
 

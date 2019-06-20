@@ -2,8 +2,6 @@
 
 use Backend\Widgets\Form;
 use Flynsarmy\SocialLogin\SocialLoginProviders\SocialLoginProviderBase;
-use Socialite;
-use Laravel\Socialite\Two\FacebookProvider;
 use URL;
 
 class Facebook extends SocialLoginProviderBase
@@ -12,23 +10,31 @@ class Facebook extends SocialLoginProviderBase
 
 	protected $driver = 'facebook';
 
+    protected $callback;
+    protected $adapter;
+
 	/**
 	 * Initialize the singleton free from constructor parameters.
 	 */
 	protected function init()
 	{
-		parent::init();
+        parent::init();
 
-        // Socialite uses config files for credentials but we want to pass from
-        // our settings page - so override the login method for this provider
-        Socialite::extend($this->driver, function($app) {
-            $providers = \Flynsarmy\SocialLogin\Models\Settings::instance()->get('providers', []);
-            $providers['Facebook']['redirect'] = URL::route('flynsarmy_sociallogin_provider_callback', ['Facebook'], true);
+        // Instantiate adapter using the configuration from our settings page
+        $providers = $this->settings->get('providers', []);
 
-            return Socialite::buildProvider(
-                FacebookProvider::class, (array)@$providers['Facebook']
-            );
-        });
+        $this->callback = URL::route('flynsarmy_sociallogin_provider_callback', ['Facebook'], true);
+        $this->adapter = new \Hybridauth\Provider\Google([
+            'callback' => $this->callback,
+
+            'keys' => [
+                'id'     => @$providers['Facebook']['client_id'],
+                'secret' => @$providers['Facebook']['client_secret'],
+            ],
+
+            'debug_mode' => config('app.debug', false),
+            'debug_file' => storage_path('logs/flynsarmy.sociallogin.'.basename(__FILE__).'.log'),
+        ]);
 	}
 
 	public function isEnabled()
@@ -91,18 +97,27 @@ class Facebook extends SocialLoginProviderBase
      */
     public function redirectToProvider()
     {
-        return Socialite::driver($this->driver)->scopes(['email'])->redirect();
+        if ($this->adapter->isConnected() )
+            return \Redirect::to($this->callback);
+
+        $this->adapter->authenticate();
     }
 
     /**
      * Handles redirecting off to the login provider
      *
-     * @return array
+     * @return array ['token' => array $token, 'profile' => \Hybridauth\User\Profile]
      */
     public function handleProviderCallback()
     {
-        $user = Socialite::driver($this->driver)->user();
+        $this->adapter->authenticate();
 
-        return (array)$user;
+        $token = $this->adapter->getAccessToken();
+        $profile = $this->adapter->getUserProfile();
+
+        return [
+            'token' => $token,
+            'profile' => $profile
+        ];
     }
 }

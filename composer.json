@@ -1,6 +1,6 @@
 {
     "name": "flynsarmy/sociallogin",
     "require": {
-        "laravel/socialite": "3.1.*"
+        "hybridauth/hybridauth": "3.0.*"
     }
 }

@@ -33,3 +33,6 @@
     - Bug fix in Rainlab.Users pages
     - Update socialite
     - Attached providers now display on both preview and update pages (previously just update page)
+1.0.23:
+    - Switch back to HybridAuth
+    - update_user_providers_token_column_1023.php
