@@ -20,22 +20,31 @@ class Facebook extends SocialLoginProviderBase
 	{
         parent::init();
 
-        // Instantiate adapter using the configuration from our settings page
-        $providers = $this->settings->get('providers', []);
-
         $this->callback = URL::route('flynsarmy_sociallogin_provider_callback', ['Facebook'], true);
-        $this->adapter = new \Hybridauth\Provider\Facebook([
-            'callback' => $this->callback,
-
-            'keys' => [
-                'id'     => @$providers['Facebook']['client_id'],
-                'secret' => @$providers['Facebook']['client_secret'],
-            ],
-
-            'debug_mode' => config('app.debug', false),
-            'debug_file' => storage_path('logs/flynsarmy.sociallogin.'.basename(__FILE__).'.log'),
-        ]);
 	}
+
+	public function getAdapter()
+    {
+        if ( !$this->adapter )
+        {
+            // Instantiate adapter using the configuration from our settings page
+            $providers = $this->settings->get('providers', []);
+
+            $this->adapter = new \Hybridauth\Provider\Facebook([
+                'callback' => $this->callback,
+
+                'keys' => [
+                    'id'     => @$providers['Facebook']['client_id'],
+                    'secret' => @$providers['Facebook']['client_secret'],
+                ],
+
+                'debug_mode' => config('app.debug', false),
+                'debug_file' => storage_path('logs/flynsarmy.sociallogin.'.basename(__FILE__).'.log'),
+            ]);
+        }
+
+        return $this->adapter;
+    }
 
 	public function isEnabled()
 	{
@@ -97,10 +106,10 @@ class Facebook extends SocialLoginProviderBase
      */
     public function redirectToProvider()
     {
-        if ($this->adapter->isConnected() )
+        if ($this->getAdapter()->isConnected() )
             return \Redirect::to($this->callback);
 
-        $this->adapter->authenticate();
+        $this->getAdapter()->authenticate();
     }
 
     /**
@@ -110,10 +119,10 @@ class Facebook extends SocialLoginProviderBase
      */
     public function handleProviderCallback()
     {
-        $this->adapter->authenticate();
+        $this->getAdapter()->authenticate();
 
-        $token = $this->adapter->getAccessToken();
-        $profile = $this->adapter->getUserProfile();
+        $token = $this->getAdapter()->getAccessToken();
+        $profile = $this->getAdapter()->getUserProfile();
 
         return [
             'token' => $token,

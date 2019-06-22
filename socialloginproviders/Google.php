@@ -19,24 +19,34 @@ class Google extends SocialLoginProviderBase
 	{
 		parent::init();
 
-        // Instantiate adapter using the configuration from our settings page
-        $providers = $this->settings->get('providers', []);
-
         $this->callback = URL::route('flynsarmy_sociallogin_provider_callback', ['Google'], true);
-        $this->adapter = new \Hybridauth\Provider\Google([
-            'callback' => $this->callback,
 
-            'keys' => [
-                'id'     => @$providers['Google']['client_id'],
-                'secret' => @$providers['Google']['client_secret'],
-            ],
-
-            'scope' => 'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email',
-
-            'debug_mode' => config('app.debug', false),
-            'debug_file' => storage_path('logs/flynsarmy.sociallogin.'.basename(__FILE__).'.log'),
-        ]);
 	}
+
+	public function getAdapter()
+    {
+        if ( !$this->adapter )
+        {
+            // Instantiate adapter using the configuration from our settings page
+            $providers = $this->settings->get('providers', []);
+
+            $this->adapter = new \Hybridauth\Provider\Google([
+                'callback' => $this->callback,
+
+                'keys' => [
+                    'id'     => @$providers['Google']['client_id'],
+                    'secret' => @$providers['Google']['client_secret'],
+                ],
+
+                'scope' => 'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email',
+
+                'debug_mode' => config('app.debug', false),
+                'debug_file' => storage_path('logs/flynsarmy.sociallogin.'.basename(__FILE__).'.log'),
+            ]);
+        }
+
+        return $this->adapter;
+    }
 
 	public function isEnabled()
 	{
@@ -103,10 +113,10 @@ class Google extends SocialLoginProviderBase
 
     public function redirectToProvider()
     {
-        if ($this->adapter->isConnected() )
+        if ($this->getAdapter()->isConnected() )
             return \Redirect::to($this->callback);
 
-        $this->adapter->authenticate();
+        $this->getAdapter()->authenticate();
     }
 
     /**
@@ -116,10 +126,10 @@ class Google extends SocialLoginProviderBase
      */
 	public function handleProviderCallback()
 	{
-	    $this->adapter->authenticate();
+	    $this->getAdapter()->authenticate();
 
-	    $token = $this->adapter->getAccessToken();
-        $profile = $this->adapter->getUserProfile();
+	    $token = $this->getAdapter()->getAccessToken();
+        $profile = $this->getAdapter()->getUserProfile();
 
         return [
             'token' => $token,

@@ -38,3 +38,5 @@
     - update_user_providers_token_column_1023.php
 1.0.24:
     - Fix facebook login
+1.0.25:
+    - Fix backend errors when settings have not yet been added
