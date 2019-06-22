@@ -36,3 +36,5 @@
 1.0.23:
     - Switch back to HybridAuth
     - update_user_providers_token_column_1023.php
+1.0.24:
+    - Fix facebook login

@@ -24,7 +24,7 @@ class Facebook extends SocialLoginProviderBase
         $providers = $this->settings->get('providers', []);
 
         $this->callback = URL::route('flynsarmy_sociallogin_provider_callback', ['Facebook'], true);
-        $this->adapter = new \Hybridauth\Provider\Google([
+        $this->adapter = new \Hybridauth\Provider\Facebook([
             'callback' => $this->callback,
 
             'keys' => [
