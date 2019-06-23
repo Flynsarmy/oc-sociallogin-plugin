@@ -43,3 +43,6 @@
 1.0.26:
     - Fix twitter login
     - Fix potential error on dropping of table index
+1.0.27:
+    - Fix user registration
+    - Don't cache access tokens in HybridAuth upon successful login

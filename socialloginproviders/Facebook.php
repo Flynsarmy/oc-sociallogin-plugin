@@ -124,6 +124,10 @@ class Facebook extends SocialLoginProviderBase
         $token = $this->getAdapter()->getAccessToken();
         $profile = $this->getAdapter()->getUserProfile();
 
+        // Don't cache anything or successive logins to different accounts
+        // will keep logging in to the first account
+        $this->getAdapter()->disconnect();
+
         return [
             'token' => $token,
             'profile' => $profile

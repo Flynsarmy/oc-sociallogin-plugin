@@ -127,14 +127,19 @@ class UserManager
             return $user;
         }
 
-        // Create a username if one doesn't exist
-        if ( !isset($user_details['username']) )
-            $user_details['username'] = $user_details['email'];
+        $new_password = str_random(16);
 
-        // Generate a random password for the new user
-        $user_details['password'] = $user_details['password_confirmation'] = str_random(16);
+        $new_user = [
+            'name' => $user_details->firstName,
+            'surname' => $user_details->lastName,
+            'email' => $user_details->email,
+            'username' => $user_details->email,
+            'password' => $new_password,
+            'password_confirmation' => $new_password,
+            'phone' => $user_details->phone,
+        ];
 
-        $user = Auth::register($user_details, true);
+        $user = Auth::register($new_user, true);
         $this->attachAvatar($user, $user_details);
 
         return $this->attachProvider($user, $provider_details);
