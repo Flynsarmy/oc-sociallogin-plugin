@@ -40,3 +40,6 @@
     - Fix facebook login
 1.0.25:
     - Fix backend errors when settings have not yet been added
+1.0.26:
+    - Fix twitter login
+    - Fix potential error on dropping of table index

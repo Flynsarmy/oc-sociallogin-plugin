@@ -30,7 +30,7 @@ class Twitter extends SocialLoginProviderBase
             // Instantiate adapter using the configuration from our settings page
             $providers = $this->settings->get('providers', []);
 
-            $this->adapter = new \Hybridauth\Provider\Google([
+            $this->adapter = new \Hybridauth\Provider\Twitter([
                 'callback' => $this->callback,
 
                 'keys' => [
