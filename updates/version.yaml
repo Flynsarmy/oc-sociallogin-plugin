@@ -46,3 +46,4 @@
 1.0.27:
     - Fix user registration
     - Don't cache access tokens in HybridAuth upon successful login
+1.0.28: SQLite compatibility fix

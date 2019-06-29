@@ -44,6 +44,8 @@ Route::get('flynsarmy/sociallogin/{provider}/callback', ['as' => 'flynsarmy_soci
         return Redirect::to($error_redirect)->withErrors([$e->getMessage()]);
     }
 
+    ksort($provider_response['token']);
+
     $provider_details = [
         'provider_id' => $provider_name,
         'provider_token' => $provider_response['token'],
