@@ -164,7 +164,7 @@ class UserManager
                     'extension' => 'auto'
             ];
 
-            if ( !empty($user_details['avatar_original']) )
+            if ( !empty($user_details->avatar_original) )
             {
                 $file = new File;
                 $saveto = tempnam($file->getTempPath(), 'user_id_'.$user->id.'_avatar');
