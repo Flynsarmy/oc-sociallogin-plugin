@@ -48,3 +48,4 @@
     - Don't cache access tokens in HybridAuth upon successful login
 1.0.28: SQLite compatibility fix
 1.0.29: Check user avatars correctly
+1.0.30: Fix for databases that don't support defaults on TEXT fields

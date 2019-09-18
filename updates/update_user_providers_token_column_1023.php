@@ -25,7 +25,7 @@ class UpdateUserProvidersTokenColumn1023 extends Migration
 
         Schema::table('flynsarmy_sociallogin_user_providers', function($table)
         {
-            $table->text('provider_token')->default('')->after('provider_id');
+            $table->text('provider_token')->after('provider_id');
         });
     }
 
