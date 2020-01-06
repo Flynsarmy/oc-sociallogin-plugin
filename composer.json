@@ -1,5 +1,5 @@
 {
-    "name": "flynsarmy/sociallogin",
+    "name": "flynsarmy/oc-sociallogin-plugin",
     "require": {
         "hybridauth/hybridauth": "3.0.*"
     }
