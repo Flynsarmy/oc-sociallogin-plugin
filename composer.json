@@ -1,5 +1,13 @@
 {
     "name": "flynsarmy/oc-sociallogin-plugin",
+    "description": "Allows October CMS site visitors to register/sign in with their social media accounts",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "flynsarmy",
+            "email": "flynsarmy@gmail.com"
+        }
+    ],
     "require": {
         "hybridauth/hybridauth": "3.0.*"
     }
