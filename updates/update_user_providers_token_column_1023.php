@@ -13,13 +13,8 @@ class UpdateUserProvidersTokenColumn1023 extends Migration
 
         Schema::table('flynsarmy_sociallogin_user_providers', function($table)
         {
-            $indexes = Schema::getConnection()
-                ->getDoctrineSchemaManager()
-                ->listTableIndexes('persons');
-
             //Remove the old fields
-            if ( array_key_exists('provider_id_token_index', $indexes) )
-                $table->dropIndex('provider_id_token_index');
+            $table->dropIndex('provider_id_token_index');
             $table->dropColumn('provider_token');
         });
 
@@ -35,6 +30,13 @@ class UpdateUserProvidersTokenColumn1023 extends Migration
 
         Schema::table('flynsarmy_sociallogin_user_providers', function($table)
         {
+            $indexes = Schema::getConnection()
+                ->getDoctrineSchemaManager()
+                ->listTableIndexes('flynsarmy_sociallogin_user_providers');
+
+            //Remove the old fields
+            if ( array_key_exists('provider_id_token_index', $indexes) )
+                $table->dropIndex('provider_id_token_index');
             $table->dropColumn('provider_token');
         });
 
