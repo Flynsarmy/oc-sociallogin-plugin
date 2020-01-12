@@ -1,5 +1,6 @@
 {
     "name": "flynsarmy/oc-sociallogin-plugin",
+    "type": "october-plugin",
     "description": "Allows October CMS site visitors to register/sign in with their social media accounts",
     "license": "MIT",
     "authors": [
