@@ -11,5 +11,8 @@
     ],
     "require": {
         "hybridauth/hybridauth": "3.0.*"
+    },
+    "extra": {
+        "installer-name": "sociallogin"
     }
 }
