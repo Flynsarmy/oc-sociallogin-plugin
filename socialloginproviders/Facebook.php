@@ -1,4 +1,6 @@
-<?php namespace Flynsarmy\SocialLogin\SocialLoginProviders;
+<?php
+
+namespace Flynsarmy\SocialLogin\SocialLoginProviders;
 
 use Backend\Widgets\Form;
 use Flynsarmy\SocialLogin\SocialLoginProviders\SocialLoginProviderBase;
@@ -6,27 +8,26 @@ use URL;
 
 class Facebook extends SocialLoginProviderBase
 {
-	use \October\Rain\Support\Traits\Singleton;
+    use \October\Rain\Support\Traits\Singleton;
 
-	protected $driver = 'facebook';
+    protected $driver = 'facebook';
 
     protected $callback;
     protected $adapter;
 
-	/**
-	 * Initialize the singleton free from constructor parameters.
-	 */
-	protected function init()
-	{
+    /**
+     * Initialize the singleton free from constructor parameters.
+     */
+    protected function init()
+    {
         parent::init();
 
         $this->callback = URL::route('flynsarmy_sociallogin_provider_callback', ['Facebook'], true);
-	}
+    }
 
-	public function getAdapter()
+    public function getAdapter()
     {
-        if ( !$this->adapter )
-        {
+        if (!$this->adapter) {
             // Instantiate adapter using the configuration from our settings page
             $providers = $this->settings->get('providers', []);
 
@@ -39,19 +40,19 @@ class Facebook extends SocialLoginProviderBase
                 ],
 
                 'debug_mode' => config('app.debug', false),
-                'debug_file' => storage_path('logs/flynsarmy.sociallogin.'.basename(__FILE__).'.log'),
+                'debug_file' => storage_path('logs/flynsarmy.sociallogin.' . basename(__FILE__) . '.log'),
             ]);
         }
 
         return $this->adapter;
     }
 
-	public function isEnabled()
-	{
-		$providers = $this->settings->get('providers', []);
+    public function isEnabled()
+    {
+        $providers = $this->settings->get('providers', []);
 
-		return !empty($providers['Facebook']['enabled']);
-	}
+        return !empty($providers['Facebook']['enabled']);
+    }
 
     public function isEnabledForBackend()
     {
@@ -60,23 +61,23 @@ class Facebook extends SocialLoginProviderBase
         return !empty($providers['Facebook']['enabledForBackend']);
     }
 
-	public function extendSettingsForm(Form $form)
-	{
-		$form->addFields([
-			'noop' => [
-				'type' => 'partial',
-				'path' => '$/flynsarmy/sociallogin/partials/backend/forms/settings/_facebook_info.htm',
-				'tab' => 'Facebook',
-			],
+    public function extendSettingsForm(Form $form)
+    {
+        $form->addFields([
+            'noop' => [
+                'type' => 'partial',
+                'path' => '$/flynsarmy/sociallogin/partials/backend/forms/settings/_facebook_info.htm',
+                'tab' => 'Facebook',
+            ],
 
-			'providers[Facebook][enabled]' => [
+            'providers[Facebook][enabled]' => [
                 'label' => 'Enabled on frontend?',
-				'type' => 'checkbox',
+                'type' => 'checkbox',
                 'comment' => 'Can frontend users log in with Facebook?',
                 'default' => 'true',
                 'span' => 'left',
-				'tab' => 'Facebook',
-			],
+                'tab' => 'Facebook',
+            ],
 
             'providers[Facebook][enabledForBackend]' => [
                 'label' => 'Enabled on backend?',
@@ -87,27 +88,28 @@ class Facebook extends SocialLoginProviderBase
                 'tab' => 'Facebook',
             ],
 
-			'providers[Facebook][client_id]' => [
-				'label' => 'App ID',
-				'type' => 'text',
-				'tab' => 'Facebook',
-			],
+            'providers[Facebook][client_id]' => [
+                'label' => 'App ID',
+                'type' => 'text',
+                'tab' => 'Facebook',
+            ],
 
-			'providers[Facebook][client_secret]' => [
-				'label' => 'App Secret',
-				'type' => 'text',
-				'tab' => 'Facebook',
-			],
-		], 'primary');
-	}
+            'providers[Facebook][client_secret]' => [
+                'label' => 'App Secret',
+                'type' => 'text',
+                'tab' => 'Facebook',
+            ],
+        ], 'primary');
+    }
 
     /**
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function redirectToProvider()
     {
-        if ($this->getAdapter()->isConnected() )
+        if ($this->getAdapter()->isConnected()) {
             return \Redirect::to($this->callback);
+        }
 
         $this->getAdapter()->authenticate();
     }

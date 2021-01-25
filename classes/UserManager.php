@@ -1,4 +1,6 @@
-<?php namespace Flynsarmy\SocialLogin\Classes;
+<?php
+
+namespace Flynsarmy\SocialLogin\Classes;
 
 use Auth;
 use BackendAuth;
@@ -58,13 +60,11 @@ class UserManager
         // Are we already attached?
         $provider = $this->findProvider($provider_details);
 
-        if ( !$provider )
-        {
+        if (!$provider) {
             // Does a user with this email exist?
-            $user = Auth::findUserByLogin( $user_details->email );
+            $user = Auth::findUserByLogin($user_details->email);
             // No user with this email exists - create one
-            if ( !$user )
-            {
+            if (!$user) {
                 if (UserSettings::get('allow_registration')) {
                     // Register the user
                     $user = $this->registerUser($provider_details, $user_details);
@@ -72,19 +72,18 @@ class UserManager
                     Flash::warning(Lang::get('rainlab.user::lang.account.registration_disabled'));
                     return $user;
                 }
-            }
+
             // User was found - attach provider
-            else
+            } else {
                 $user = $this->attachProvider($user, $provider_details);
-        }
+            }
+
         // Provider was found, return the attached user
-        else
-        {
+        } else {
             $user = $provider->user;
 
             // The user may have been deleted. Make sure this isn't the case
-            if ( !$user )
-            {
+            if (!$user) {
                 $provider->delete();
                 return $this->find($provider_details, $user_details);
             }
@@ -123,7 +122,7 @@ class UserManager
             $provider_details, $user_details
         ], true);
 
-        if ( $user && $user instanceof User ){
+        if ($user && $user instanceof User) {
             $this->attachAvatar($user, $user_details);
             return $user;
         }
@@ -157,25 +156,22 @@ class UserManager
 
     public function attachAvatar(User $user, Profile $user_details)
     {
-        if ( $user_details->photoURL )
-        {
+        if ($user_details->photoURL) {
             $thumbOptions = [
                     'mode'      => 'crop',
                     'extension' => 'auto'
             ];
 
-            if ( !empty($user_details->avatar_original) )
-            {
-                $file = new File;
-                $saveto = tempnam($file->getTempPath(), 'user_id_'.$user->id.'_avatar');
-                $saveToImage = $saveto.'.jpg';
+            if (!empty($user_details->avatar_original)) {
+                $file = new File();
+                $saveto = tempnam($file->getTempPath(), 'user_id_' . $user->id . '_avatar');
+                $saveToImage = $saveto . '.jpg';
                 rename($saveto, $saveToImage);
-                self::grab_image($user_details->photoURL, $saveToImage);
+                self::grabImage($user_details->photoURL, $saveToImage);
 
                 $file->data = $saveToImage;
 
-                if ( $file->data && filesize($saveToImage) > 0 )
-                {
+                if ($file->data && filesize($saveToImage) > 0) {
                     $thumb = $file->getThumb('160', '160', $thumbOptions);
                     $file->save();
                     $user->avatar()->add($file);
@@ -193,7 +189,7 @@ class UserManager
      * @param  $url
      * @param  $saveto
      */
-    public static function grab_image($url, $saveto)
+    public static function grabImage($url, $saveto)
     {
         $client = new Client();
 
@@ -201,16 +197,16 @@ class UserManager
             $profileResponse = $client->get($url);
             $profilePicture = $profileResponse->getBody();
 
-            if ( file_exists($saveto) ) {
+            if (file_exists($saveto)) {
                 unlink($saveto);
             }
-            $fp = fopen($saveto,'x');
+            $fp = fopen($saveto, 'x');
             fwrite($fp, $profilePicture);
             fclose($fp);
         } catch (RequestException $e) {
-            if ( $e->hasResponse() ) {
+            if ($e->hasResponse()) {
                 Log::error(Psr7\str($e->getResponse()));
-            } else{
+            } else {
                 Log::error($e->getMessage() . ' in ' . $e->getFile() . ' on line ' . $e->getLine());
             }
         } catch (Exception $e) {

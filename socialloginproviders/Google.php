@@ -1,4 +1,6 @@
-<?php namespace Flynsarmy\SocialLogin\SocialLoginProviders;
+<?php
+
+namespace Flynsarmy\SocialLogin\SocialLoginProviders;
 
 use Backend\Widgets\Form;
 use Flynsarmy\SocialLogin\SocialLoginProviders\SocialLoginProviderBase;
@@ -6,27 +8,26 @@ use URL;
 
 class Google extends SocialLoginProviderBase
 {
-	use \October\Rain\Support\Traits\Singleton;
-	protected $driver = 'google';
+    use \October\Rain\Support\Traits\Singleton;
 
-	protected $callback;
-	protected $adapter;
+    protected $driver = 'google';
 
-	/**
-	 * Initialize the singleton free from constructor parameters.
-	 */
-	protected function init()
-	{
-		parent::init();
+    protected $callback;
+    protected $adapter;
+
+    /**
+     * Initialize the singleton free from constructor parameters.
+     */
+    protected function init()
+    {
+        parent::init();
 
         $this->callback = URL::route('flynsarmy_sociallogin_provider_callback', ['Google'], true);
+    }
 
-	}
-
-	public function getAdapter()
+    public function getAdapter()
     {
-        if ( !$this->adapter )
-        {
+        if (!$this->adapter) {
             // Instantiate adapter using the configuration from our settings page
             $providers = $this->settings->get('providers', []);
 
@@ -38,22 +39,23 @@ class Google extends SocialLoginProviderBase
                     'secret' => @$providers['Google']['client_secret'],
                 ],
 
-                'scope' => 'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email',
+                'scope' =>
+                    'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email',
 
                 'debug_mode' => config('app.debug', false),
-                'debug_file' => storage_path('logs/flynsarmy.sociallogin.'.basename(__FILE__).'.log'),
+                'debug_file' => storage_path('logs/flynsarmy.sociallogin.' . basename(__FILE__) . '.log'),
             ]);
         }
 
         return $this->adapter;
     }
 
-	public function isEnabled()
-	{
-		$providers = $this->settings->get('providers', []);
+    public function isEnabled()
+    {
+        $providers = $this->settings->get('providers', []);
 
-		return !empty($providers['Google']['enabled']);
-	}
+        return !empty($providers['Google']['enabled']);
+    }
 
     public function isEnabledForBackend()
     {
@@ -62,23 +64,23 @@ class Google extends SocialLoginProviderBase
         return !empty($providers['Google']['enabledForBackend']);
     }
 
-	public function extendSettingsForm(Form $form)
-	{
-		$form->addFields([
-			'noop' => [
-				'type' => 'partial',
-				'path' => '$/flynsarmy/sociallogin/partials/backend/forms/settings/_google_info.htm',
-				'tab' => 'Google',
-			],
+    public function extendSettingsForm(Form $form)
+    {
+        $form->addFields([
+            'noop' => [
+                'type' => 'partial',
+                'path' => '$/flynsarmy/sociallogin/partials/backend/forms/settings/_google_info.htm',
+                'tab' => 'Google',
+            ],
 
-			'providers[Google][enabled]' => [
-				'label' => 'Enabled on frontend?',
-				'type' => 'checkbox',
+            'providers[Google][enabled]' => [
+                'label' => 'Enabled on frontend?',
+                'type' => 'checkbox',
                 'comment' => 'Can frontend users log in with Google?',
                 'default' => 'true',
-				'span' => 'left',
+                'span' => 'left',
                 'tab' => 'Google',
-			],
+            ],
 
             'providers[Google][enabledForBackend]' => [
                 'label' => 'Enabled on backend?',
@@ -89,32 +91,33 @@ class Google extends SocialLoginProviderBase
                 'tab' => 'Google',
             ],
 
-			'providers[Google][app_name]' => [
-				'label' => 'Application Name',
-				'type' => 'text',
-				'default' => 'Social Login',
-				'comment' => 'This appears on the Google login screen. Usually your site name.',
-				'tab' => 'Google',
-			],
+            'providers[Google][app_name]' => [
+                'label' => 'Application Name',
+                'type' => 'text',
+                'default' => 'Social Login',
+                'comment' => 'This appears on the Google login screen. Usually your site name.',
+                'tab' => 'Google',
+            ],
 
-			'providers[Google][client_id]' => [
-				'label' => 'Client ID',
-				'type' => 'text',
-				'tab' => 'Google',
-			],
+            'providers[Google][client_id]' => [
+                'label' => 'Client ID',
+                'type' => 'text',
+                'tab' => 'Google',
+            ],
 
-			'providers[Google][client_secret]' => [
-				'label' => 'Client Secret',
-				'type' => 'text',
-				'tab' => 'Google',
-			],
-		], 'primary');
-	}
+            'providers[Google][client_secret]' => [
+                'label' => 'Client Secret',
+                'type' => 'text',
+                'tab' => 'Google',
+            ],
+        ], 'primary');
+    }
 
     public function redirectToProvider()
     {
-        if ($this->getAdapter()->isConnected() )
+        if ($this->getAdapter()->isConnected()) {
             return \Redirect::to($this->callback);
+        }
 
         $this->getAdapter()->authenticate();
     }
@@ -124,11 +127,11 @@ class Google extends SocialLoginProviderBase
      *
      * @return array ['token' => array $token, 'profile' => \Hybridauth\User\Profile]
      */
-	public function handleProviderCallback()
-	{
-	    $this->getAdapter()->authenticate();
+    public function handleProviderCallback()
+    {
+        $this->getAdapter()->authenticate();
 
-	    $token = $this->getAdapter()->getAccessToken();
+        $token = $this->getAdapter()->getAccessToken();
         $profile = $this->getAdapter()->getUserProfile();
 
         // Don't cache anything or successive logins to different accounts
@@ -139,5 +142,5 @@ class Google extends SocialLoginProviderBase
             'token' => $token,
             'profile' => $profile
         ];
-	}
+    }
 }

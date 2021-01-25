@@ -1,16 +1,18 @@
-<?php namespace Flynsarmy\SocialLogin\Models;
+<?php
+
+namespace Flynsarmy\SocialLogin\Models;
 
 use Model;
 
 class Settings extends Model
 {
-	public $implement = ['System.Behaviors.SettingsModel'];
+    public $implement = ['System.Behaviors.SettingsModel'];
 
-	// A unique code
-	public $settingsCode = 'flynsarmy_sociallogin_settings';
+    // A unique code
+    public $settingsCode = 'flynsarmy_sociallogin_settings';
 
-	// Reference to field configuration
-	public $settingsFields = 'fields.yaml';
+    // Reference to field configuration
+    public $settingsFields = 'fields.yaml';
 
-	protected $cache = [];
+    protected $cache = [];
 }

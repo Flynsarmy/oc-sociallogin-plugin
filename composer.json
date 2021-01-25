@@ -5,12 +5,28 @@
     "license": "MIT",
     "authors": [
         {
-            "name": "flynsarmy",
+            "name": "Flyn San",
             "email": "flynsarmy@gmail.com"
         }
     ],
     "require": {
         "hybridauth/hybridauth": "3.0.*"
+    },
+    "require-dev": {
+        "squizlabs/php_codesniffer": "^3.5"
+    },
+    "scripts": {
+        "phpstan": "php -d memory_limit=-1 ./vendor/bin/phpstan analyse",
+        "phpcbf": "vendor/bin/phpcbf --standard=./.phpcs.xml ./",
+        "phpcs":  "vendor/bin/phpcs  -s --standard=./.phpcs.xml ./",
+        "phpcompat": "vendor/bin/phpcs --standard=PHPCompatibility --runtime-set testVersion 7.4 ./",
+        "phpunit": "vendor/bin/phpunit ./tests/unit/",
+        "coverage": "vendor/bin/phpunit tests/unit --coverage-html coverage --whitelist src/",
+        "lint": "vendor/bin/parallel-lint --exclude vendor .",
+        "test": [
+            "composer validate --strict",
+            "@phpcs"
+        ]
     },
     "extra": {
         "installer-name": "sociallogin"

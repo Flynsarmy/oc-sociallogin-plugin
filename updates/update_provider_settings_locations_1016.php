@@ -1,4 +1,6 @@
-<?php namespace Flynsarmy\SocialLogin\Updates;
+<?php
+
+namespace Flynsarmy\SocialLogin\Updates;
 
 use Flynsarmy\SocialLogin\Models\Settings;
 use October\Rain\Database\Updates\Migration;
@@ -25,9 +27,11 @@ class UpdateProviderSettingsLocations1016 extends Migration
 
         $providers = $settings->get('providers', []);
 
-        foreach ( $this->mapping as $old => $new )
-            if ( ($old_val=array_get($providers, $old)) )
+        foreach ($this->mapping as $old => $new) {
+            if (($old_val = array_get($providers, $old))) {
                 array_set($providers, $new, $old_val);
+            }
+        }
 
 
         $settings->set('providers', $providers);
@@ -39,9 +43,11 @@ class UpdateProviderSettingsLocations1016 extends Migration
 
         $providers = $settings->get('providers', []);
 
-        foreach ( $this->mapping as $new => $old )
-            if ( ($old_val=array_get($providers, $old)) )
+        foreach ($this->mapping as $new => $old) {
+            if (($old_val = array_get($providers, $old))) {
                 array_set($providers, $new, $old_val);
+            }
+        }
 
         $settings->set('providers', $providers);
     }

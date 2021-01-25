@@ -1,4 +1,6 @@
-<?php namespace Flynsarmy\SocialLogin\SocialLoginProviders;
+<?php
+
+namespace Flynsarmy\SocialLogin\SocialLoginProviders;
 
 use Backend\Widgets\Form;
 use Flynsarmy\SocialLogin\SocialLoginProviders\SocialLoginProviderBase;
@@ -6,27 +8,26 @@ use URL;
 
 class Twitter extends SocialLoginProviderBase
 {
-	use \October\Rain\Support\Traits\Singleton;
+    use \October\Rain\Support\Traits\Singleton;
 
-	protected $driver = 'twitter';
+    protected $driver = 'twitter';
 
     protected $callback;
     protected $adapter;
 
-	/**
-	 * Initialize the singleton free from constructor parameters.
-	 */
-	protected function init()
-	{
+    /**
+     * Initialize the singleton free from constructor parameters.
+     */
+    protected function init()
+    {
         parent::init();
 
         $this->callback = URL::route('flynsarmy_sociallogin_provider_callback', ['Twitter'], true);
-	}
+    }
 
-	public function getAdapter()
+    public function getAdapter()
     {
-        if ( !$this->adapter )
-        {
+        if (!$this->adapter) {
             // Instantiate adapter using the configuration from our settings page
             $providers = $this->settings->get('providers', []);
 
@@ -39,19 +40,19 @@ class Twitter extends SocialLoginProviderBase
                 ],
 
                 'debug_mode' => config('app.debug', false),
-                'debug_file' => storage_path('logs/flynsarmy.sociallogin.'.basename(__FILE__).'.log'),
+                'debug_file' => storage_path('logs/flynsarmy.sociallogin.' . basename(__FILE__) . '.log'),
             ]);
         }
 
         return $this->adapter;
     }
 
-	public function isEnabled()
-	{
-		$providers = $this->settings->get('providers', []);
+    public function isEnabled()
+    {
+        $providers = $this->settings->get('providers', []);
 
-		return !empty($providers['Twitter']['enabled']);
-	}
+        return !empty($providers['Twitter']['enabled']);
+    }
 
     public function isEnabledForBackend()
     {
@@ -62,23 +63,23 @@ class Twitter extends SocialLoginProviderBase
         return false;
     }
 
-	public function extendSettingsForm(Form $form)
-	{
-		$form->addFields([
-			'noop' => [
-				'type' => 'partial',
-				'path' => '$/flynsarmy/sociallogin/partials/backend/forms/settings/_twitter_info.htm',
-				'tab' => 'Twitter',
-			],
+    public function extendSettingsForm(Form $form)
+    {
+        $form->addFields([
+            'noop' => [
+                'type' => 'partial',
+                'path' => '$/flynsarmy/sociallogin/partials/backend/forms/settings/_twitter_info.htm',
+                'tab' => 'Twitter',
+            ],
 
-			'providers[Twitter][enabled]' => [
-				'label' => 'Enabled on frontend?',
-				'type' => 'checkbox',
+            'providers[Twitter][enabled]' => [
+                'label' => 'Enabled on frontend?',
+                'type' => 'checkbox',
                 'comment' => 'Can frontend users log in with Twitter?',
                 'default' => 'true',
-				'span' => 'left',
+                'span' => 'left',
                 'tab' => 'Twitter',
-			],
+            ],
 
             //'providers[Twitter][enabledForBackend]' => [
             //    'label' => 'Enabled on backend?',
@@ -89,27 +90,28 @@ class Twitter extends SocialLoginProviderBase
             //    'tab' => 'Twitter',
             //],
 
-			'providers[Twitter][identifier]' => [
-				'label' => 'API Key',
-				'type' => 'text',
-				'tab' => 'Twitter',
-			],
+            'providers[Twitter][identifier]' => [
+                'label' => 'API Key',
+                'type' => 'text',
+                'tab' => 'Twitter',
+            ],
 
-			'providers[Twitter][secret]' => [
-				'label' => 'API Secret',
-				'type' => 'text',
-				'tab' => 'Twitter',
-			],
-		], 'primary');
-	}
+            'providers[Twitter][secret]' => [
+                'label' => 'API Secret',
+                'type' => 'text',
+                'tab' => 'Twitter',
+            ],
+        ], 'primary');
+    }
 
     /**
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function redirectToProvider()
     {
-        if ($this->getAdapter()->isConnected() )
+        if ($this->getAdapter()->isConnected()) {
             return \Redirect::to($this->callback);
+        }
 
         $this->getAdapter()->authenticate();
     }
