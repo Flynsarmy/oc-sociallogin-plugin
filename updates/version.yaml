@@ -51,3 +51,4 @@
 1.0.30: Fix for databases that don't support defaults on TEXT fields
 1.1:
     - '!!! Updated to HybridAuth 3.7. Test logging in on each enabled provider after updating!'
+1.1.1: Minor bug fix

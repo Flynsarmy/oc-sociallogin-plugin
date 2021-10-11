@@ -26,7 +26,7 @@ Route::get(
     ]
 )->where(['provider' => '[A-Z][a-zA-Z ]+']);
 
-Route::get(
+Route::any(
     'flynsarmy/sociallogin/{provider}/callback',
     [
         'as' => 'flynsarmy_sociallogin_provider_callback',
