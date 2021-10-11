@@ -10,7 +10,7 @@
         }
     ],
     "require": {
-        "hybridauth/hybridauth": "3.0.*"
+        "hybridauth/hybridauth": "^3.7"
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "^3.5"

@@ -64,7 +64,7 @@ class Facebook extends SocialLoginProviderBase
     public function extendSettingsForm(Form $form)
     {
         $form->addFields([
-            'noop' => [
+            'providers[Facebook][noop]' => [
                 'type' => 'partial',
                 'path' => '$/flynsarmy/sociallogin/partials/backend/forms/settings/_facebook_info.htm',
                 'tab' => 'Facebook',

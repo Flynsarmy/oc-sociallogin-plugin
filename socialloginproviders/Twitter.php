@@ -66,7 +66,7 @@ class Twitter extends SocialLoginProviderBase
     public function extendSettingsForm(Form $form)
     {
         $form->addFields([
-            'noop' => [
+            'providers[Twitter][noop]' => [
                 'type' => 'partial',
                 'path' => '$/flynsarmy/sociallogin/partials/backend/forms/settings/_twitter_info.htm',
                 'tab' => 'Twitter',

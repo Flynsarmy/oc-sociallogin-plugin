@@ -49,3 +49,5 @@
 1.0.28: SQLite compatibility fix
 1.0.29: Check user avatars correctly
 1.0.30: Fix for databases that don't support defaults on TEXT fields
+1.1:
+    - '!!! Updated to HybridAuth 3.7. Test logging in on each enabled provider after updating!'

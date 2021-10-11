@@ -67,7 +67,7 @@ class Google extends SocialLoginProviderBase
     public function extendSettingsForm(Form $form)
     {
         $form->addFields([
-            'noop' => [
+            'providers[Google][noop]' => [
                 'type' => 'partial',
                 'path' => '$/flynsarmy/sociallogin/partials/backend/forms/settings/_google_info.htm',
                 'tab' => 'Google',

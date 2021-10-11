@@ -129,11 +129,18 @@ class UserManager
 
         $new_password = str_random(16);
 
+        $email = $user_details->email;
+        // Some login providers don't return an email address. Use their
+        // identifier with @dev.null instead.
+        if (!$email) {
+            $email = $user_details->identifier . '@dev.null';
+        }
+
         $new_user = [
             'name' => $user_details->firstName,
             'surname' => $user_details->lastName,
-            'email' => $user_details->email,
-            'username' => $user_details->email,
+            'email' => $email,
+            'username' => $email,
             'password' => $new_password,
             'password_confirmation' => $new_password,
             'phone' => $user_details->phone,
