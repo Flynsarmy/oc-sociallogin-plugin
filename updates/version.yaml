@@ -16,10 +16,10 @@
 1.0.14: Singleton trait fix
 1.0.15: Compatibility fix with RainLab.GoogleAnalytics
 1.0.16:
-    - !!! Important update with breaking changes.
+    - '!!! Important update with breaking changes.'
     - update_provider_settings_locations_1016.php
 1.0.17: Fixed issue registering new users
-1.0.18: !!! Requires October build 420 or higher.
+1.0.18: '!!! Requires October build 420 or higher.'
 1.0.19: Add backend permission requirement
 1.0.20:
     - Upgrade to latest socialite
@@ -49,6 +49,6 @@
 1.0.28: SQLite compatibility fix
 1.0.29: Check user avatars correctly
 1.0.30: Fix for databases that don't support defaults on TEXT fields
-1.1:
+1.1.0:
     - '!!! Updated to HybridAuth 3.7. Test logging in on each enabled provider after updating!'
 1.1.1: Minor bug fix
