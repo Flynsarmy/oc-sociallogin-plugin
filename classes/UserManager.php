@@ -146,6 +146,9 @@ class UserManager
             'phone' => $user_details->phone,
         ];
 
+        // Opportunity to extend user info
+        Event::fire('flynsarmy.sociallogin.extendUserBeforeRegister', [&$new_user]);
+
         $user = Auth::register($new_user, true);
         $this->attachAvatar($user, $user_details);
 
