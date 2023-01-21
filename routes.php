@@ -21,6 +21,9 @@ Route::get(
 
             $provider = $provider_class::instance();
 
+            //Saving the session...
+            Session::save();
+
             return $provider->redirectToProvider();
         }
     ]
