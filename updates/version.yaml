@@ -53,3 +53,4 @@
     - '!!! Updated to HybridAuth 3.7. Test logging in on each enabled provider after updating!'
 1.1.1: Minor bug fix
 1.1.2: Syntax fix for October 3, add flynsarmy.sociallogin.extendUserBeforeRegister event.
+1.1.3: Fix session data persistence
