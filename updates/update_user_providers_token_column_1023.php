@@ -8,7 +8,6 @@ use October\Rain\Database\Updates\Migration;
 
 class UpdateUserProvidersTokenColumn1023 extends Migration
 {
-
     public function up()
     {
         Provider::query()->truncate();

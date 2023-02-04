@@ -11,7 +11,6 @@ use Illuminate\Support\ViewErrorBag;
 
 class SocialLogin extends ComponentBase
 {
-
     public function componentDetails()
     {
         return [

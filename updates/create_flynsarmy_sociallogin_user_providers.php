@@ -7,7 +7,6 @@ use October\Rain\Database\Updates\Migration;
 
 class CreateFlynsarmySocialLoginUserProvidersTable extends Migration
 {
-
     public function up()
     {
         Schema::create('flynsarmy_sociallogin_user_providers', function ($table) {
