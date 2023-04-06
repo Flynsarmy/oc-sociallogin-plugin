@@ -8,8 +8,8 @@ use Event;
 use URL;
 use Illuminate\Foundation\AliasLoader;
 use System\Classes\PluginBase;
-use RainLab\User\Models\User;
-use RainLab\User\Controllers\Users as UsersController;
+use Winter\User\Models\User;
+use Winter\User\Controllers\Users as UsersController;
 use Backend\Widgets\Form;
 use Flynsarmy\SocialLogin\Classes\ProviderManager;
 
@@ -25,7 +25,7 @@ class Plugin extends PluginBase
     // Make this plugin run on updates page
     public $elevated = true;
 
-    public $require = ['RainLab.User'];
+    public $require = ['Winter.User'];
 
     /**
      * Returns information about this plugin.
@@ -51,7 +51,7 @@ class Plugin extends PluginBase
                 'icon'        => 'icon-users',
                 'class'       => 'Flynsarmy\SocialLogin\Models\Settings',
                 'order'       => 600,
-                'permissions' => ['rainlab.users.access_settings'],
+                'permissions' => ['winter.users.access_settings'],
             ]
         ];
     }
@@ -71,7 +71,7 @@ class Plugin extends PluginBase
 
         // Add 'Social Logins' column to users list
         UsersController::extendListColumns(function ($widget, $model) {
-            if (!$model instanceof \RainLab\User\Models\User) {
+            if (!$model instanceof \Winter\User\Models\User) {
                 return;
             }
 
@@ -102,10 +102,10 @@ class Plugin extends PluginBase
 
         // Add 'Social Providers' field to edit users form
         Event::listen('backend.form.extendFields', function ($widget) {
-            if (!$widget->getController() instanceof \RainLab\User\Controllers\Users) {
+            if (!$widget->getController() instanceof \Winter\User\Controllers\Users) {
                 return;
             }
-            if (!$widget->model instanceof \RainLab\User\Models\User) {
+            if (!$widget->model instanceof \Winter\User\Models\User) {
                 return;
             }
             if (!in_array($widget->getContext(), ['update', 'preview'])) {
