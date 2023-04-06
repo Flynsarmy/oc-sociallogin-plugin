@@ -8,7 +8,7 @@ use URL;
 
 class Facebook extends SocialLoginProviderBase
 {
-    use \October\Rain\Support\Traits\Singleton;
+    use \Winter\Storm\Support\Traits\Singleton;
 
     protected $driver = 'facebook';
 
