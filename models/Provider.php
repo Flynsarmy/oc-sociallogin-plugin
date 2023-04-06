@@ -6,7 +6,7 @@ use App;
 use Str;
 use Model;
 use Carbon\Carbon;
-use October\Rain\Support\Markdown;
+use Winter\Storm\Support\Markdown;
 
 /**
  * Post Model
@@ -34,6 +34,6 @@ class Provider extends Model
      * @var array Relations
      */
     public $belongsTo = [
-        'user' => ['RainLab\User\Models\User']
+        'user' => ['Winter\User\Models\User']
     ];
 }
