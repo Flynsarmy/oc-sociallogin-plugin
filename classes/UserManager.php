@@ -13,14 +13,14 @@ use Flynsarmy\SocialLogin\Models\Provider;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7;
 use GuzzleHttp\Exception\RequestException;
-use October\Rain\Auth\Models\User;
+use Winter\Storm\Auth\Models\User;
 use Hybridauth\User\Profile;
-use RainLab\User\Models\Settings as UserSettings;
+use Winter\User\Models\Settings as UserSettings;
 use System\Models\File;
 
 class UserManager
 {
-    use \October\Rain\Support\Traits\Singleton;
+    use \Winter\Storm\Support\Traits\Singleton;
 
     /**
      * Finds a backend user by the email address.
@@ -69,7 +69,7 @@ class UserManager
                     // Register the user
                     $user = $this->registerUser($provider_details, $user_details);
                 } else {
-                    Flash::warning(Lang::get('rainlab.user::lang.account.registration_disabled'));
+                    Flash::warning(Lang::get('winter.user::lang.account.registration_disabled'));
                     return $user;
                 }
 
