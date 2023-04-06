@@ -6,7 +6,7 @@ use System\Classes\PluginManager;
 
 class ProviderManager
 {
-    use \October\Rain\Support\Traits\Singleton;
+    use \Winter\Storm\Support\Traits\Singleton;
 
     /**
      * @var array An array of provider types.
