@@ -3,7 +3,7 @@
 namespace Flynsarmy\SocialLogin\Updates;
 
 use Flynsarmy\SocialLogin\Models\Settings;
-use October\Rain\Database\Updates\Migration;
+use Winter\Storm\Database\Updates\Migration;
 
 /**
  * We've changed some settings names around so update from old to
