@@ -8,7 +8,7 @@ use Cms\Classes\Theme;
 
 class DropDownHelper
 {
-    use \October\Rain\Support\Traits\Singleton;
+    use \Winter\Storm\Support\Traits\Singleton;
 
     protected $pages = [];
     protected $partials = [];
