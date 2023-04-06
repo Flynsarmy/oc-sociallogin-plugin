@@ -4,7 +4,7 @@ namespace Flynsarmy\SocialLogin\Updates;
 
 use Schema;
 use Flynsarmy\SocialLogin\Models\Provider;
-use October\Rain\Database\Updates\Migration;
+use Winter\Storm\Database\Updates\Migration;
 
 class UpdateUserProvidersTokenColumn1023 extends Migration
 {
