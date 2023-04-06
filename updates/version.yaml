@@ -1,12 +1,13 @@
 1.0.1:
     - First version of SocialLogin
     - create_flynsarmy_sociallogin_user_providers.php
-1.0.2: Require RainLab.User
-1.0.3: Fixed RainLab.User integration
+1.0.2: Require Winter.User
+1.0.3: Fixed Winter.User integration
 1.0.4: User registration bug fix
 1.0.5: Fix password confirmation error
 1.0.6: Add login details when registering users
-1.0.7: Rename login to username to match RainLab.Users latest update
+1.0.7: Rename login to username to match 
+Lab.Users latest update
 1.0.8: RC compatibility update
 1.0.9: Google login fix
 1.0.10: Don't add multiple Google associations to users
@@ -14,7 +15,7 @@
 1.0.12: Update login providers
 1.0.13: Deprecated code fix, settings page fix
 1.0.14: Singleton trait fix
-1.0.15: Compatibility fix with RainLab.GoogleAnalytics
+1.0.15: Compatibility fix with Winter.GoogleAnalytics
 1.0.16:
     - '!!! Important update with breaking changes.'
     - update_provider_settings_locations_1016.php
@@ -30,7 +31,7 @@
     - Update socialite
     - Remove deprecated Facebook scope
 1.0.22:
-    - Bug fix in Rainlab.Users pages
+    - Bug fix in Winter.Users pages
     - Update socialite
     - Attached providers now display on both preview and update pages (previously just update page)
 1.0.23:
