@@ -75,7 +75,7 @@ Route::any(
                     ->findBackendUserByEmail($user_details->email);
 
                 if (!$user) {
-                    throw new October\Rain\Auth\AuthException(sprintf(
+                    throw new Winter\Storm\Auth\AuthException(sprintf(
                         'Administrator with email address "%s" not found.',
                         $user_details['email']
                     ));
