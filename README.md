@@ -13,5 +13,11 @@
   3. `cd` into that folder and clone the project using `HTTPS` or `SSH`
   4. Rename the Cloned projects folder name to ```sociallogin```
   5. Installing the RainLab User plugin to your project
-  6. Next use this```composer require hybridauth/hybridauth``` command and install the `Hybridauth Laravel` library.
+  6. Open a new terminal on the project main directory you can do it using
+        1. On Windows `Ctrl +`
+        2. On Mac `Command + J`
+  8. Enter the command to run the migration on the plugin ```php artisan october:migrate```
+  9. Next use this```composer require hybridauth/hybridauth``` command and install the `Hybridauth Laravel` library.
+  10. Now you can access the login by ```<YOUR_OCTOBER_CMS_URL>/flynsarmy/sociallogin/Google?s=/&f=/login```
+        o Example: http://example.com/flynsarmy/sociallogin/Google?s=/&f=/login
 
