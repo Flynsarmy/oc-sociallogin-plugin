@@ -18,6 +18,10 @@
         2. On Mac `Command + J`
   8. Enter the command to run the migration on the plugin ```php artisan october:migrate```
   9. Next use this```composer require hybridauth/hybridauth``` command and install the `Hybridauth Laravel` library.
-  10. Now you can access the login by ```<YOUR_OCTOBER_CMS_URL>/flynsarmy/sociallogin/Google?s=/&f=/login```
+  10. Next you need to access the settings to paste the credentials on the Social Login Settings.
+  11. Now you can access the login by ```<YOUR_OCTOBER_CMS_URL>/flynsarmy/sociallogin/Google?s=/&f=/login``` 
       1. Example: http://example.com/flynsarmy/sociallogin/Google?s=/&f=/login
+  12. Thank you 🥰.
+    
+    
 
