@@ -1,12 +1,84 @@
 <hr>
-<h2>
+<style type="text/css">
+.btnn-md {
+    padding: 10px 16px;
+    font-size: 15px;
+    line-height: 23px
+}
+
+.btnn-primary {
+    background-color: #4099ff;
+    border-color: #4099ff;
+    color: #fff;
+    cursor: pointer;
+    -webkit-transition: all ease-in .3s;
+    transition: all ease-in .3s
+}
+
+.btnn {
+    border-radius: 2px;
+    font-size: 15px;
+    padding: 10px 19px;
+    cursor: pointer
+}
+
+.m-b-20 {
+    margin-bottom: 20px
+}
+
+.btnn-md {
+    padding: 10px 16px;
+    font-size: 15px;
+    line-height: 23px
+}
+
+.heading{
+    font-size: 21px;
+}
+
+#infoMessage p{
+    color: red !important;
+}
+
+
+.btnn-google {
+    color: #545454;
+    background-color: #ffffff;
+    box-shadow: 0 1px 2px 1px #ddd;
+}
+
+
+.or-container {
+    align-items: center;
+    color: #ccc;
+    display: flex;
+    margin: 25px 0;
+}
+
+.line-separator {
+    background-color: #ccc;
+    flex-grow: 5;
+    height: 1px;
+}
+
+.or-label {
+    flex-grow: 1;
+    margin: 0 15px;
+    text-align: center;
+}
+</style>
+<p style="font-family:Arial, Helvetica, sans-serif;">
     or login with
     <?php
         $links = [];
         foreach ( $social_login_links as $name => $link ):
-            $links[] = '<a href="'. $link .'" class="text-muted"><i class="fa icon-'. strtolower($name) .'" aria-hidden="true" title="'. $name .'"> '.$name.'</i></a>';
+            $links[] = '<br><br>
+                        <a class="btnn btnn-lg btnn-google btnn-block btnn-outline" style="text-decoration:none" href="'. $link .'">
+                            <i class="fa icon-'. strtolower($name) .'" aria-hidden="true" title="'. $name .'"></i>
+                            &nbsp; login with '.$name.'
+                        </a>';
         endforeach;
 
         echo implode(', ', $links);
     ?>
-</h2>
+</p>
